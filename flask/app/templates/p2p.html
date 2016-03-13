@@ -8,7 +8,6 @@
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 
-
 {% block page_content %}
 <div class="container" style="max-width: 970px;">
 	<div class="page-header">
@@ -17,36 +16,107 @@
 	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
 
-
     <div class="row">
-      <div class="form-group">
-        <div class="col-sm-2">
-          {{p2p_form.tx_lat.label(class="control-label")}}
-        </div>
-        <div class="col-sm-2">
-          {{ p2p_form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
-        </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="form-group">
-        <div class="col-sm-2">
-          {{p2p_form.tx_lon.label(class="control-label")}}
-        </div>
-        <div class="col-sm-2">
-          {{ p2p_form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
-        </div>
-      </div>
-    </div>
+    <!-- tx params -->
+    <div class="col-sm-6">
+      <fieldset>
+        <legend>Tx. Site</legend>
 
-    <div class="row">
-      <div class="form-group">
-    	   <div class="col-sm-offset-2 col-sm-10">
-           <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
-         </div>
-      </div>
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.tx_name.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.tx_name(class="form-control", type="text") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.tx_lat.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.tx_lon.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.tx_pwr.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.tx_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div> <!-- end of tx params -->
+
+    <div class="col-sm-6">
+      <fieldset>
+        <legend>Rx.Site</legend>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.rx_name.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.rx_name(class="form-control", type="text") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.rx_lat.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.rx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.rx_lon.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.rx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div> <!-- end of rx params -->
+  </div> <!-- end of input params row -->
+
+  <div class="row">
+    <div class="form-group">
+       <div class="col-sm-1">
+         <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+       </div>
     </div>
+  </div>
+
 	</form>
 </div>
 {% endblock %}

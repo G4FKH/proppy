@@ -5,6 +5,8 @@ class Config:
     SECRET_KEY = 'kdaMmYwBTkepkFwtnR6N'
 
     ITURHFPROP_APPLICATION_PATH = '/home/jwatson/rec533/ITURHFProp.exe'
+    ITURHFPROP_DATA_PATH = '/usr/local/share/ituhfprop/Data/'
+    SSN_DATA_PATH = '/usr/local/share/ituhfprop/Data/'
 
     @staticmethod
     def init_app(app):
