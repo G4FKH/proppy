@@ -1,0 +1,56 @@
+PathName "Riyadh / Jeddah"
+
+// All coordinates in decimal degrees.
+PathTXName "Riyadh"
+Path.L_tx.lat   24.67
+Path.L_tx.lng    46.72
+//RXAntFilePath "Isotropic"
+TXAntFilePath "ISOTROPIC"
+TXGOS 2.16
+
+PathRXName "Jeddah"
+Path.L_rx.lat 21.48
+Path.L_rx.lon 39.20
+RXAntFilePath "ISOTROPIC"
+RXGOS 2.16
+AntennaOrientation "TX2RX"
+
+Path.year 2016
+Path.month  03
+Path.hour 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
+Path.SSN  41.1
+Path.frequency 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
+Path.txpower -10.0 // 100W, input in dBw reference to 1Kw - -7.0 = 200W, -10 = 100W
+Path.BW 3000.0
+Path.SNRr 0.0
+Path.Relr 90
+Path.ManMadeNoise "RURAL"
+
+// Digital modulation
+Path.Modulation "ANALOG"
+Path.SorL "SHORTPATH"
+
+// Output Specification (See README for options)
+RptFilePath "c:\iturhfprop\Reports\"
+RptFileFormat "RPT_BCR | RPT_OPMUF"
+//RptFileFormat "RPT_DUMPPATH"
+//RptFileFormat "RPT_D | RPT_ELE | RPT_BMUF | RPT_BMUFD | RPT_OPMUF | RPT_OPMUFD | RPT_E"
+
+// Output area to be examined. All corners must be specified. For pt-to-pt duplicate corners. 
+LL.lat   21.48
+LL.lng   39.20
+LR.lat   21.48
+LR.lng   46.72
+UL.lat   24.67
+UL.lng   39.20
+UR.lat   24.67
+UR.lng   46.72
+
+// Lat and Long increment. Note: There is no lower limit
+// latinc 2.0
+// lnginc 2.0
+
+// DataFilePath is the base location of the Antennna, Coeff, P.1239 and IonMap files
+DataFilePath "/usr/local/share/ituhfprop/Data/"
+// End
+

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Proppy{% endblock %}
+
+{% block head %}
+  {{ super() }}
+	<!-- Plotly.js -->
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+
+{% block page_content %}
+<div class="container" style="max-width: 970px;">
+	<div class="page-header">
+		<h1>Proppy <small>HF Circuit Prediction</small></h1>
+	</div>
+	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
+	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
+  	<div class="form-group">
+    	<div class="col-sm-offset-2 col-sm-10">
+        <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+    </div>
+	</form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+$( '#parameters_form' ).submit( function( e ) {
+    do_prediction(e.target);
+    e.preventDefault();
+  });
+
+function do_prediction(form) {
+	$("#loading_screen").show();
+	var form_obj = form;
+	//var form_obj = $(form);
+	var form_url = $(form_obj).attr("action");
+	var form_data = new FormData(form);
+	$.ajax( {
+		url: form_url,
+		type: 'POST',
+		data: form_data,
+    dataType: "json",
+		mimeType: "multipart/form-data",
+		processData: false,
+		contentType: false,
+		success: function(result) {
+
+    console.log(result);
+    result['colorscale'] = 'Jet';
+    result['colorbar'] = {
+      title: 'Reliability (%)',
+      titleside: 'right',
+      titlefont: {
+        size: 14,
+        family: 'Arial, sans-serif'
+      }
+    };
+
+     var layout = {
+       xaxis: {
+         title: 'Time (UTC)',
+         titlefont: {
+           family: 'Arial, sans-serif',
+           size: 14,
+           color: '#7f7f7f'
+         }
+       },
+       yaxis: {
+         title: 'Frequency / MHz',
+         titlefont: {
+           family: 'Arial, sans-serif',
+           size: 14,
+           color: '#7f7f7f'
+         }
+       },
+
+     };
+
+     Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
+    },
+		error: function(result) {
+			// Handle errors here
+			//
+			ajax_complete_msg = "Error";
+			console.log('ERRORS: ' + result);
+		},
+		complete: function() {
+			$("#loading_screen").hide();
+		}
+	});
+}
+</script>
+{% endblock %}

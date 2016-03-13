@@ -1,0 +1,42 @@
+{% macro render_activity(activity) %}
+<div class="row">
+  <div class="col-sm-12">
+    <!--{{activity['notes'].replace('\n','<br />\n') | safe }}<br />-->
+    <!-- (', '.join('"' + item + '"' for item in parameters)) -->
+    {% for para in activity['notes'].split("\n") %}
+      <p class="lead">{{para}}</p>
+    {% endfor %}
+  </div>
+</div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <dl class="dl-horizontal">
+        <dt>Time:</dt>
+        <dd>{{activity['time']}} Hours</dd>
+      </dl>
+    </div>
+    <div class="col-sm-8">
+      <dl class="dl-horizontal">
+        <dt>Materials:</dt>
+        <dd>
+          <ul>
+            {% if activity['resources'] %}
+              {% for resource in activity['resources'] %}
+                <li>{{ resource['description']}}, Qty. {{ resource['quantity']}}</li>
+              {% endfor %}
+            {% else %}
+              <li>N/A</li>
+            {% endif %}
+          </ul>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 text-right">
+      <em>{{activity['firstname']}} {{activity['lastname']}} {{activity['formatted_tstamp']}}</em>
+    </div>
+  </div>
+  <hr />
+{% endmacro %}

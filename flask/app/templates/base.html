@@ -1,0 +1,32 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Fubar{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+  <link href="{{ url_for('static', filename='css/proppy.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+  {% block page_content %}
+  {% endblock %}
+    {% block footer %}
+    <div class='clearfix'></div>
+    <div id="footer">
+    &copy; 2016 <a href="mailto:jwatson@mac.com">James Watson</a>.
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+{% endblock %}
