@@ -16,9 +16,36 @@
 	</div>
 	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
-  	<div class="form-group">
-    	<div class="col-sm-offset-2 col-sm-10">
-        <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+
+
+    <div class="row">
+      <div class="form-group">
+        <div class="col-sm-2">
+          {{p2p_form.tx_lat.label(class="control-label")}}
+        </div>
+        <div class="col-sm-2">
+          {{ p2p_form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <div class="col-sm-2">
+          {{p2p_form.tx_lon.label(class="control-label")}}
+        </div>
+        <div class="col-sm-2">
+          {{ p2p_form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+    	   <div class="col-sm-offset-2 col-sm-10">
+           <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+         </div>
+      </div>
     </div>
 	</form>
 </div>
@@ -62,6 +89,7 @@ function do_prediction(form) {
      var layout = {
        xaxis: {
          title: 'Time (UTC)',
+         range: [0, 24],
          titlefont: {
            family: 'Arial, sans-serif',
            size: 14,
@@ -70,13 +98,13 @@ function do_prediction(form) {
        },
        yaxis: {
          title: 'Frequency / MHz',
+         range: [2, 30],
          titlefont: {
            family: 'Arial, sans-serif',
            size: 14,
            color: '#7f7f7f'
          }
        },
-
      };
 
      Plotly.newPlot('plot-div', [result['p'], result['m']], layout);

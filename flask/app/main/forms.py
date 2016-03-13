@@ -6,7 +6,9 @@ from flask_wtf.file import FileField
 
 
 class P2PForm(Form):
-    tx_lat = DecimalField("Tx.Latitude")
+    tx_lat = DecimalField("Latitude", validators=[Required(), NumberRange(-90, 90)])
+    tx_lon = DecimalField("Longitude", validators=[Required(), NumberRange(-180, 180)])
+
     submit = SubmitField("Submit")
 
     """
