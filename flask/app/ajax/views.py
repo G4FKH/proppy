@@ -12,8 +12,7 @@ from . import ajax
 
 @ajax.route('/predict', methods=['POST'])
 def predict():
-    #fault_id = request.form['fault_id'].strip()
-    print(request.form)
+    #print(request.form)
     tx_name = request.form['tx_name'].strip()
     tx_lat = float(request.form['tx_lat'])
     tx_lon = float(request.form['tx_lon'])
@@ -59,7 +58,6 @@ def predict():
     input_file.write('UL.lng {:.2f}\n'.format(min(tx_lon, rx_lon)))
     input_file.write('UR.lat {:.2f}\n'.format(max(tx_lat, rx_lat)))
     input_file.write('UR.lng {:.2f}\n'.format(max(tx_lon, rx_lon)))
-    #todo read from options
     input_file.write('DataFilePath "{:s}"\n'.format(current_app.config['ITURHFPROP_DATA_PATH']))
     input_file.close()
 
@@ -75,6 +73,7 @@ def predict():
     print(output_file.name)
     prediction = REC533Out(output_file.name)
     muf, mesh_grid, params = prediction.get_p2p_plot_data('REL')
+    print(params.title)
     mesh_grid = np.flipud(np.rot90(mesh_grid))
 
     m = {'x':list(range(0,25)),
@@ -85,15 +84,93 @@ def predict():
         'line':{'width':4,'color':'rgb(77, 0, 204)'},
         'type':'scatter'}
 
-    print(mesh_grid)
+    #print(mesh_grid)
     p = {'z':mesh_grid.tolist(),
         'x':list(range(0,25)),
         'y':list(range(2,31)),
         'type':'contour',
-        'colorscale': 'Jet', 
+        'colorscale': 'Jet',
         'autocolorscale': False,
         'zmax':100,
-        'zmin':0,
+        'zmin':0
+    }
+
+    response = {'m':m, 'p':p}
+    return jsonify(**response)
+
+# http://nbviewer.jupyter.org/github/etpinard/plotly-misc-nbs/blob/etienne/plotly-maps.ipynb
+# https://www.udacity.com/course/viewer#!/c-ud507/l-3066258748/m-3166498678
+
+@ajax.route('/areapredict', methods=['POST'])
+def areapredict():
+    print(request.form)
+    tx_name = request.form['tx_name'].strip()
+    tx_lat = float(request.form['tx_lat'])
+    tx_lon = float(request.form['tx_lon'])
+    tx_pwr = 10 * log10(float(request.form['tx_pwr'])/1000.0)
+
+    input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
+    print(input_file.name)
+    input_file.write('PathName "Proppy Plot"\n')
+    input_file.write('PathTXName "{:s}"\n'.format(tx_name))
+    input_file.write('Path.L_tx.lat {:.2f}\n'.format(tx_lat))
+    input_file.write('Path.L_tx.lng {:.2f}\n'.format(tx_lon))
+    input_file.write('TXAntFilePath "ISOTROPIC"\n')
+    input_file.write('TXGOS 2.16\n')
+
+    input_file.write('RXAntFilePath "ISOTROPIC"\n')
+    input_file.write('RXGOS 2.16\n')
+
+    input_file.write('AntennaOrientation "TX2RX"\n')
+    input_file.write('Path.year {:d}\n'.format(2016))
+    input_file.write('Path.month  {:d}\n'.format(3))
+    input_file.write('Path.hour {:d}\n'.format(12))
+    input_file.write('Path.SSN {:d}\n'.format(42))
+    input_file.write('Path.frequency {:.2f}\n'.format(11.33))
+    input_file.write('Path.txpower {:.2f}\n'.format(tx_pwr))
+    input_file.write('Path.BW 3000.0\n')
+    input_file.write('Path.SNRr 18.0\n')
+    input_file.write('Path.Relr 90\n')
+    input_file.write('Path.ManMadeNoise "RURAL"\n')
+    input_file.write('Path.Modulation "ANALOG"\n')
+    input_file.write('Path.SorL "SHORTPATH"\n')
+    input_file.write('RptFileFormat "RPT_RXLOCATION | RPT_SNR | RPT_BCR | RPT_E | RPT_OPMUFD"\n')
+    input_file.write('LL.lat -90\n')
+    input_file.write('LL.lng -180\n')
+    input_file.write('LR.lat -90\n')
+    input_file.write('LR.lng 180\n')
+    input_file.write('UL.lat 90\n')
+    input_file.write('UL.lng -180\n')
+    input_file.write('UR.lat 90\n')
+    input_file.write('UR.lng 180\n')
+    input_file.write('latinc  30.0\n')
+    input_file.write('lnginc  30.0\n')
+    input_file.write('DataFilePath "{:s}"\n'.format(current_app.config['ITURHFPROP_DATA_PATH']))
+    input_file.close()
+
+    FNULL = open(os.devnull, 'w')
+    output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out')
+    subprocess.call(["wine",
+        current_app.config['ITURHFPROP_APPLICATION_PATH'],
+        input_file.name,
+        output_file.name],
+        stdout=FNULL,
+        stderr=subprocess.STDOUT)
+    print(output_file.name)
+    prediction = REC533Out(output_file.name)
+    mesh_grid, plot_type, lons, lats, num_pts_lon, num_pts_lat, pp, (plot_dt, ssn, freq) = prediction.get_plot_data(0, 'REL')
+    print(mesh_grid)
+    #mesh_grid = np.flipud(np.rot90(mesh_grid))
+    #TODO the static components of the json would be better added at the
+    # client side...
+
+    #print(mesh_grid)
+    p = {'z':mesh_grid.tolist(),
+        'x':list(lons),
+        'y':list(lats),
+        'opacity':0.8,
+        'type':'contour',
+        'colorscale': 'Jet',
         'colorbar':{'ticksuffix':'%',
                 'title':'Reliability',
                 'tickmode':'array',
@@ -101,5 +178,5 @@ def predict():
             }
         }
 
-    response = {'m':m, 'p':p}
+    response = {'p':p}
     return jsonify(**response)

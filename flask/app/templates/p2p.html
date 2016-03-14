@@ -11,7 +11,7 @@
 {% block page_content %}
 <div class="container" style="max-width: 970px;">
 	<div class="page-header">
-		<h1>Proppy <small>HF Circuit Prediction</small></h1>
+		<h1>Proppy <small>HF Circuit Prediction: Point-to-Point</small></h1>
 	</div>
 	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
@@ -145,41 +145,64 @@ function do_prediction(form) {
 		contentType: false,
 		success: function(result) {
 
-    console.log(result);
     result['colorscale'] = 'Jet';
-    result['colorbar'] = {
-      title: 'Reliability (%)',
-      titleside: 'right',
-      titlefont: {
-        size: 14,
-        family: 'Arial, sans-serif'
-      }
+    //console.log(result);
+    console.log(window.innerWidth);
+
+    if (window.innerWidth >= 768) {
+      result['p']['colorbar'] = {
+        tickmode:'array',
+        tickvals:[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        ticksuffix:'%',
+        title: 'Reliability (%)',
+        titleside: 'right',
+        titlefont: {
+          size: 14,
+          family: 'Arial, sans-serif'
+        }
+      };
+    } else {
+      result['p']['colorbar'] = {
+        tickmode:'array',
+        tickvals:[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        thickness:10,
+        xpad:4
+      };
+    }
+
+    var layout = {
+      xaxis: {
+        title: 'Time (UTC)',
+        range: [0, 24],
+        tick0: 0,
+        dtick: 2,
+        titlefont: {
+          family: 'Arial, sans-serif',
+          size: 14,
+          color: '#7f7f7f'
+        },
+      },
+      yaxis: {
+        title: 'Frequency / MHz',
+        range: [2, 30],
+        titlefont: {
+          family: 'Arial, sans-serif',
+          size: 14,
+          color: '#7f7f7f'
+        }
+      },
+      margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 50,
+        pad: 4
+      },
     };
 
-     var layout = {
-       xaxis: {
-         title: 'Time (UTC)',
-         range: [0, 24],
-         titlefont: {
-           family: 'Arial, sans-serif',
-           size: 14,
-           color: '#7f7f7f'
-         }
-       },
-       yaxis: {
-         title: 'Frequency / MHz',
-         range: [2, 30],
-         titlefont: {
-           family: 'Arial, sans-serif',
-           size: 14,
-           color: '#7f7f7f'
-         }
-       },
-     };
-
-     Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
-    },
-		error: function(result) {
+    Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
+  },
+	error: function(result) {
 			// Handle errors here
 			//
 			ajax_complete_msg = "Error";
@@ -190,5 +213,13 @@ function do_prediction(form) {
 		}
 	});
 }
+
+window.onresize = function() {
+  var update = {
+    width: $('#plot-div').width()
+  }
+  Plotly.relayout('plot-div', update)
+};
+
 </script>
 {% endblock %}
