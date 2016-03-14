@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Proppy{% endblock %}
+
+{% block head %}
+  {{ super() }}
+	<!-- Plotly.js -->
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="container" style="max-width: 970px;">
+	<div class="page-header">
+		<h1>Proppy <small>HF Circuit Prediction: Area</small></h1>
+	</div>
+	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
+	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
+
+    <div class="row">
+
+    <!-- tx params -->
+    <div class="col-sm-6">
+      <fieldset>
+        <legend>Tx. Site</legend>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{area_form.tx_name.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ area_form.tx_name(class="form-control", type="text") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{area_form.tx_lat.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ area_form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{area_form.tx_lon.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ area_form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{area_form.tx_pwr.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ area_form.tx_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div> <!-- end of tx params -->
+  </div> <!-- end of input params row -->
+
+  <div class="row">
+    <div class="form-group">
+       <div class="col-sm-1">
+         <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+       </div>
+    </div>
+  </div>
+
+	</form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+$( '#parameters_form' ).submit( function( e ) {
+    do_prediction(e.target);
+    e.preventDefault();
+  });
+
+function do_prediction(form) {
+	$("#loading_screen").show();
+	var form_obj = form;
+	//var form_obj = $(form);
+	var form_url = $(form_obj).attr("action");
+	var form_data = new FormData(form);
+	$.ajax( {
+		url: form_url,
+		type: 'POST',
+		data: form_data,
+    dataType: "json",
+		mimeType: "multipart/form-data",
+		processData: false,
+		contentType: false,
+		success: function(result) {
+
+    console.log("success");
+    
+    result['colorscale'] = 'Jet';
+    result['colorbar'] = {
+      title: 'Reliability (%)',
+      titleside: 'right',
+      titlefont: {
+        size: 14,
+        family: 'Arial, sans-serif'
+      }
+    };
+
+    var layout = {
+    showlegend: false,
+    geo: {
+        resolution: 5,
+        showland: true,
+        showlakes: false,
+        landcolor: 'rgb(204, 204, 204)',
+
+        coastlinewidth: 1,
+        lataxis: {
+          range: [ -90, 90 ],
+          showgrid: false
+        },
+        lonaxis:{
+          range: [-180, 180],
+          showgrid: false
+        }
+      }
+  };
+
+   var data = [{
+      type: 'scattergeo',
+      lat: [ 40.7127, 51.5072 ],
+      lon: [ -74.0059, 0.1275 ],
+      mode: 'lines',
+      line:{
+          width: 2,
+          color: 'blue'
+      }
+    }];
+
+     Plotly.newPlot('plot-div', [result['p']], layout);
+    },
+		error: function(result) {
+			// Handle errors here
+			//
+			ajax_complete_msg = "Error";
+			console.log('ERRORS: ' + result);
+		},
+		complete: function() {
+			$("#loading_screen").hide();
+		}
+	});
+}
+</script>
+{% endblock %}
