@@ -15,8 +15,8 @@ def predict():
     print(request.form)
 
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
-    sys_year = int(request.form['sys_year'])
-    sys_month = int(request.form['sys_month'])
+    sys_year = int(request.form['date'][3:])
+    sys_month = int(request.form['date'][:2])
 
     tx_name = request.form['tx_name'].strip()
     tx_lat = float(request.form['tx_lat'])
@@ -27,7 +27,6 @@ def predict():
     rx_lat = float(request.form['rx_lat'])
     rx_lon = float(request.form['rx_lon'])
     rx_gain = float(request.form['rx_gain'])
-
 
     input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
     input_file.write('PathName "Proppy Plot"\n')

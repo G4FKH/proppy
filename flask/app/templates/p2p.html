@@ -4,8 +4,8 @@
 
 {% block head %}
   {{ super() }}
-	<!-- Plotly.js -->
-	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css')}}">
+
 {% endblock %}
 
 {% block page_content %}
@@ -20,13 +20,16 @@
         <div class="col-sm-12">
           <fieldset>
             <legend>System</legend>
+            <!-- https://github.com/eternicode/bootstrap-datepicker -->
+
         <div class="form-group">
           <div class="col-sm-2">
-            {{ p2p_form.sys_month(class="form-control") }}
+            <label class="control-label">Date</label>
           </div>
           <div class="col-sm-2">
-            {{ p2p_form.sys_year(class="form-control") }}
+            <input type="text" id="datepicker" class="datepicker form-control" placeholder="mm-yyyy" name="date">
           </div>
+
          <div class="col-sm-2">
            {{p2p_form.sys_traffic.label(class="control-label")}}
          </div>
@@ -163,8 +166,24 @@
 
 {% block scripts %}
 {{ super() }}
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
+
+
 <script>
-$( '#parameters_form' ).submit( function( e ) {
+
+  $(function(){
+   $('#datepicker').datepicker({
+     format: "mm-yyyy",
+     startView: "months",
+     minViewMode: "months",
+     startDate: '-6m',
+     endDate: '+6m'
+    });
+  });
+
+  $( '#parameters_form' ).submit( function( e ) {
     do_prediction(e.target);
     e.preventDefault();
   });
@@ -187,7 +206,7 @@ function do_prediction(form) {
 
     result['colorscale'] = 'Jet';
     //console.log(result);
-    console.log(window.innerWidth);
+    //console.log(window.innerWidth);
 
     if (window.innerWidth >= 768) {
       result['p']['colorbar'] = {
