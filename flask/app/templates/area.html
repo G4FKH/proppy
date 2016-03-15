@@ -107,7 +107,7 @@ function do_prediction(form) {
 		success: function(result) {
 
     console.log("success");
-    
+
     result['colorscale'] = 'Jet';
     result['colorbar'] = {
       title: 'Reliability (%)',
@@ -148,8 +148,8 @@ function do_prediction(form) {
           color: 'blue'
       }
     }];
-
-     Plotly.newPlot('plot-div', [result['p']], layout);
+    Plotly.newPlot('plot-div', [result['p']], layout);
+    //Plotly.newPlot('plot-div', [result['p']], layout);
     },
 		error: function(result) {
 			// Handle errors here

@@ -17,7 +17,34 @@
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
 
     <div class="row">
+        <div class="col-sm-12">
+          <fieldset>
+            <legend>System</legend>
+        <div class="form-group">
+          <div class="col-sm-2">
+            {{ p2p_form.sys_month(class="form-control") }}
+          </div>
+          <div class="col-sm-2">
+            {{ p2p_form.sys_year(class="form-control") }}
+          </div>
+         <div class="col-sm-2">
+           {{p2p_form.sys_traffic.label(class="control-label")}}
+         </div>
+         <div class="col-sm-2">
+           {{ p2p_form.sys_traffic(class="form-control", type="text") }}
+         </div>
+         <div class="col-sm-2">
+           {{p2p_form.sys_pwr.label(class="control-label")}}
+         </div>
+         <div class="col-sm-2">
+           {{ p2p_form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+         </div>
+       </div>
+     </fieldset>
+      </div>
+    </div>
 
+    <div class="row">
     <!-- tx params -->
     <div class="col-sm-6">
       <fieldset>
@@ -59,13 +86,15 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{p2p_form.tx_pwr.label(class="control-label")}}
+              {{p2p_form.tx_gain.label(class="control-label")}}
             </div>
             <div class="col-sm-9">
-              {{ p2p_form.tx_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+              {{ p2p_form.tx_gain(class="form-control", type="number", min="0", max="20.0", step="0.01", value="2.16", required=true) }}
             </div>
           </div>
         </div>
+
+
       </fieldset>
     </div> <!-- end of tx params -->
 
@@ -102,6 +131,17 @@
             </div>
             <div class="col-sm-9">
               {{ p2p_form.rx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm-3">
+              {{p2p_form.rx_gain.label(class="control-label")}}
+            </div>
+            <div class="col-sm-9">
+              {{ p2p_form.rx_gain(class="form-control", type="number", min="0", max="20.0", step="0.01", value="2.16", required=true) }}
             </div>
           </div>
         </div>
