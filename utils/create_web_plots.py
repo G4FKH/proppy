@@ -21,14 +21,12 @@ bin_path = "/opt/rec533/Bin/ITURHFProp.exe"
 '''
 Location of the working directory (where the .in and .out files will be stored)
 '''
-#working_dir = "/home/proppy/tmp/"
-working_dir = "/home/jwatson/tmpplots/"
+working_dir = "/home/proppy/tmp/"
 '''
 Define the location of the directory to write the plots to.
 The string must end with the '/' character.
 '''
 out_dir = "/var/www/html/img/prediction/"
-out_dir= "/home/jwatson/tmpplots/"
 '''
 List of the frequencies to plot.
 '''
@@ -55,10 +53,10 @@ for current_hour in range(1,25):
             r533_in_file.write('Path.L_tx.lat   54.50\n')
             r533_in_file.write('Path.L_tx.lng   -2.00\n')
             r533_in_file.write('TXAntFilePath "ISOTROPIC"\n')
-            r533_in_file.write('TXGOS 6.0\n')
+            r533_in_file.write('TXGOS 2.16\n')
             r533_in_file.write('PathRXName "World"\n')
             r533_in_file.write('RXAntFilePath "ISOTROPIC"\n')
-            r533_in_file.write('RXGOS 6.0\n')
+            r533_in_file.write('RXGOS 2.16\n')
             r533_in_file.write('AntennaOrientation "TX2RX"\n')
             r533_in_file.write('Path.year {:d}\n'.format(current_year))
             r533_in_file.write('Path.month  {:d}\n'.format(current_month))
@@ -66,9 +64,9 @@ for current_hour in range(1,25):
             r533_in_file.write('Path.SSN {:d}\n'.format(current_ssn))
             r533_in_file.write('Path.frequency {:.2f}\n'.format(freq))
             r533_in_file.write('Path.txpower -10.0\n')
-            r533_in_file.write('Path.BW 85.0\n')
-            r533_in_file.write('Path.SNRr 27.0\n')
-            r533_in_file.write('Path.Relr 11\n')
+            r533_in_file.write('Path.BW 2800.0\n')
+            r533_in_file.write('Path.SNRr 18.0\n')
+            r533_in_file.write('Path.Relr 90\n')
             r533_in_file.write('Path.ManMadeNoise "RURAL"\n')
             r533_in_file.write('Path.Modulation "ANALOG"\n')
             r533_in_file.write('Path.SorL "SHORTPATH"\n')
@@ -81,8 +79,8 @@ for current_hour in range(1,25):
             r533_in_file.write('UL.lng   -180.0\n')
             r533_in_file.write('UR.lat     90.0\n')
             r533_in_file.write('UR.lng    180.0\n')
-            r533_in_file.write('latinc  20.0\n')
-            r533_in_file.write('lnginc  20.0\n')
+            r533_in_file.write('latinc  2.0\n')
+            r533_in_file.write('lnginc  2.0\n')
             r533_in_file.write('DataFilePath "/opt/rec533/Data/"\n')
 
         # The following is just a mock-up until a Linux compatible binary
