@@ -6,7 +6,7 @@ class Config:
 
     ITURHFPROP_APPLICATION_PATH = '/home/jwatson/rec533/ITURHFProp.exe'
     ITURHFPROP_DATA_PATH = '/usr/local/share/ituhfprop/Data/'
-    SSN_DATA_PATH = '/usr/local/share/ituhfprop/Data/'
+    SSN_DATA_PATH = '/home/jwatson/github/proppy/ssn.json'
 
     @staticmethod
     def init_app(app):

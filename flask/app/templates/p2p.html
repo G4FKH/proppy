@@ -23,6 +23,9 @@
             <legend>System</legend>
             <!-- https://github.com/eternicode/bootstrap-datepicker -->
 
+        <input type="hidden" name="month" />
+        <input type="hidden" name="year" />
+
         <div class="form-group">
           <div class="col-sm-1">
             <label class="control-label">Date</label>
@@ -184,8 +187,8 @@
     $('#datetimepicker').datetimepicker({
       viewMode : 'months',
       format: 'MMM YYYY',
-      minDate : moment("2012 04", "YYYY MM"),
-      maxDate : moment("2017 01", "YYYY MM"),
+      minDate : moment("{{min_year}} {{min_month}}", "YYYY MM"),
+      maxDate : moment("{{max_year}} {{max_month}}", "YYYY MM"),
       useCurrent : true
     });
   });
@@ -199,16 +202,33 @@ function do_prediction(form) {
 	$("#loading_screen").show();
 	var form_obj = form;
   var dt = $("#datetimepicker").data("DateTimePicker").date();
+  $("input[name='month']").replaceWith(
+    $('<input>').attr({
+      type: 'hidden',
+      name: 'month',
+      value: dt.format("M")
+    })
+  );
+  $("input[name='year']").replaceWith(
+    $('<input>').attr({
+      type: 'hidden',
+      name: 'year',
+      value: dt.format("YYYY")
+    })
+  );
+  /*
   $('<input>').attr({
     type: 'hidden',
     name: 'month',
     value: dt.format("M")
   }).appendTo('form');
+
   $('<input>').attr({
     type: 'hidden',
     name: 'year',
     value: dt.format("YYYY")
   }).appendTo('form');
+  */
 	var form_url = $(form_obj).attr("action");
 	var form_data = new FormData(form);
 	$.ajax( {
