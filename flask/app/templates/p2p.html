@@ -4,7 +4,8 @@
 
 {% block head %}
   {{ super() }}
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css')}}">
+	<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css')}}">-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 
 {% endblock %}
 
@@ -23,12 +24,17 @@
             <!-- https://github.com/eternicode/bootstrap-datepicker -->
 
         <div class="form-group">
-          <div class="col-sm-2">
+          <div class="col-sm-1">
             <label class="control-label">Date</label>
           </div>
-          <div class="col-sm-2">
-            <input type="text" id="datepicker" class="datepicker form-control" placeholder="mm-yyyy" name="date">
+          <div class="col-sm-3">
+          <div class='input-group date' id='datetimepicker'>
+            <input type='text' class="form-control" name="date"/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
           </div>
+        </div>
 
          <div class="col-sm-2">
            {{p2p_form.sys_traffic.label(class="control-label")}}
@@ -168,18 +174,19 @@
 {{ super() }}
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
-
+<!--<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
 
-  $(function(){
-   $('#datepicker').datepicker({
-     format: "mm-yyyy",
-     startView: "months",
-     minViewMode: "months",
-     startDate: '-6m',
-     endDate: '+6m'
+  $(function () {
+    $('#datetimepicker').datetimepicker({
+      viewMode : 'months',
+      format: 'MMM YYYY',
+      minDate : moment("2012 04", "YYYY MM"),
+      maxDate : moment("2017 01", "YYYY MM"),
+      useCurrent : true
     });
   });
 
@@ -191,7 +198,17 @@
 function do_prediction(form) {
 	$("#loading_screen").show();
 	var form_obj = form;
-	//var form_obj = $(form);
+  var dt = $("#datetimepicker").data("DateTimePicker").date();
+  $('<input>').attr({
+    type: 'hidden',
+    name: 'month',
+    value: dt.format("M")
+  }).appendTo('form');
+  $('<input>').attr({
+    type: 'hidden',
+    name: 'year',
+    value: dt.format("YYYY")
+  }).appendTo('form');
 	var form_url = $(form_obj).attr("action");
 	var form_data = new FormData(form);
 	$.ajax( {

@@ -12,11 +12,10 @@ from . import ajax
 
 @ajax.route('/predict', methods=['POST'])
 def predict():
-    print(request.form)
-
+    #print(request.form)
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
-    sys_year = int(request.form['date'][3:])
-    sys_month = int(request.form['date'][:2])
+    sys_year = int(request.form['year'])
+    sys_month = int(request.form['month'])
 
     tx_name = request.form['tx_name'].strip()
     tx_lat = float(request.form['tx_lat'])
