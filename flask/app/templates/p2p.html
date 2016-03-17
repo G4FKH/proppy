@@ -216,20 +216,7 @@ function do_prediction(form) {
       value: dt.format("YYYY")
     })
   );
-  /*
-  $('<input>').attr({
-    type: 'hidden',
-    name: 'month',
-    value: dt.format("M")
-  }).appendTo('form');
-
-  $('<input>').attr({
-    type: 'hidden',
-    name: 'year',
-    value: dt.format("YYYY")
-  }).appendTo('form');
-  */
-	var form_url = $(form_obj).attr("action");
+  var form_url = $(form_obj).attr("action");
 	var form_data = new FormData(form);
 	$.ajax( {
 		url: form_url,

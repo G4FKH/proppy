@@ -13,7 +13,7 @@ from . import ajax
 
 @ajax.route('/predict', methods=['POST'])
 def predict():
-    print(request.form)
+    #print(request.form)
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
     sys_year = int(request.form['year'])
     sys_month = int(request.form['month'])
@@ -28,11 +28,7 @@ def predict():
     rx_lon = float(request.form['rx_lon'])
     rx_gain = float(request.form['rx_gain'])
 
-    with open(current_app.config['SSN_DATA_PATH']) as ssn_data_file:
-        ssn_dict = json.load(ssn_data_file)
-    ssn = ssn_dict[str(sys_year)]['{:02d}'.format(sys_month)]
-    print(ssn_dict)
-    print(ssn)
+    ssn = current_app.config['SSN_DATA'][str(sys_year)]['{:d}'.format(sys_month)]
 
     input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
     input_file.write('PathName "Proppy Plot"\n')
@@ -52,7 +48,7 @@ def predict():
     input_file.write('Path.year {:d}\n'.format(sys_year))
     input_file.write('Path.month  {:d}\n'.format(sys_month))
     input_file.write('Path.hour 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24\n')
-    input_file.write('Path.SSN {:d}\n'.format(ssn))
+    input_file.write('Path.SSN {:.2f}\n'.format(float(ssn)))
     input_file.write('Path.frequency 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30\n')
     input_file.write('Path.txpower {:.2f}\n'.format(sys_pwr))
     input_file.write('Path.BW 3000.0\n')
@@ -85,7 +81,7 @@ def predict():
     print(output_file.name)
     prediction = REC533Out(output_file.name)
     muf, mesh_grid, params = prediction.get_p2p_plot_data('REL')
-    print(params.title)
+    #print(params.title)
     mesh_grid = np.flipud(np.rot90(mesh_grid))
 
     m = {'x':list(range(0,25)),
@@ -108,6 +104,7 @@ def predict():
     }
 
     response = {'m':m, 'p':p}
+    os.remove(input_file.name)
     return jsonify(**response)
 
 # http://nbviewer.jupyter.org/github/etpinard/plotly-misc-nbs/blob/etienne/plotly-maps.ipynb
