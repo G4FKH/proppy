@@ -13,7 +13,7 @@ from . import ajax
 
 @ajax.route('/predict', methods=['POST'])
 def predict():
-    #print(request.form)
+    print(request.form)
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
     sys_year = int(request.form['year'])
     sys_month = int(request.form['month'])
@@ -29,6 +29,14 @@ def predict():
     rx_gain = float(request.form['rx_gain'])
 
     ssn = current_app.config['SSN_DATA'][str(sys_year)]['{:d}'.format(sys_month)]
+
+    if request.form['sys_traffic'] == 'cw':
+        traffic = {'bw':1000, 'snr':0}
+    else:
+        traffic = {'bw':3000, 'snr':13}
+
+    print(traffic['bw'])
+    print(traffic['snr'])
 
     input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
     input_file.write('PathName "Proppy Plot"\n')
@@ -51,8 +59,8 @@ def predict():
     input_file.write('Path.SSN {:.2f}\n'.format(float(ssn)))
     input_file.write('Path.frequency 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30\n')
     input_file.write('Path.txpower {:.2f}\n'.format(sys_pwr))
-    input_file.write('Path.BW 3000.0\n')
-    input_file.write('Path.SNRr 18.0\n')
+    input_file.write('Path.BW {:.1f}\n'.format(traffic['bw']))
+    input_file.write('Path.SNRr {:.1f}\n'.format(traffic['snr']))
     input_file.write('Path.Relr 90\n')
     input_file.write('Path.ManMadeNoise "RURAL"\n')
     input_file.write('Path.Modulation "ANALOG"\n')
