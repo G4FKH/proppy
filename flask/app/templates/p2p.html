@@ -4,7 +4,6 @@
 
 {% block head %}
   {{ super() }}
-	<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.css')}}">-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 
 {% endblock %}
@@ -32,7 +31,7 @@
           </div>
           <div class="col-sm-3">
           <div class='input-group date' id='datetimepicker'>
-            <input type='text' class="form-control" name="date"/>
+            <input type='text' class="form-control" name="date", required=true/>
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>
@@ -184,12 +183,13 @@
 <script>
 
   $(function () {
+    var dateNow = new Date();
     $('#datetimepicker').datetimepicker({
       viewMode : 'months',
       format: 'MMM YYYY',
       minDate : moment("{{min_year}} {{min_month}}", "YYYY MM"),
       maxDate : moment("{{max_year}} {{max_month}}", "YYYY MM"),
-      useCurrent : true
+      defaultDate:dateNow
     });
   });
 
