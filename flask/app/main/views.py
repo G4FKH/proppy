@@ -1,4 +1,5 @@
-from flask import render_template, current_app
+from datetime import datetime, timedelta
+from flask import render_template, current_app, make_response
 import json
 
 from . import main
@@ -21,3 +22,24 @@ def p2p_predict():
 def area_predict():
     area_form = AreaForm()
     return render_template('area.html', area_form=area_form)
+
+@main.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    try:
+      """Generate sitemap.xml. Makes a list of urls and date modified."""
+      pages=[]
+      ten_days_ago=(datetime.now() - timedelta(days=7)).date().isoformat()
+      # static pages
+      for rule in current_app.url_map.iter_rules():
+          print(rule)
+          if "GET" in rule.methods and len(rule.arguments)==0:
+             print(rule)
+             pages.append(["http://139.162.54.202"+str(rule.rule),ten_days_ago])
+
+      sitemap_xml = render_template('sitemap_template.xml', pages=pages)
+      response=make_response(sitemap_xml)
+      response.headers["Content-Type"] = "application/xml"
+
+      return response
+    except Exception as e:
+        return(str(e))
