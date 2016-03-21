@@ -13,7 +13,7 @@
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Point-to-Point</small></h1>
 	</div>
-	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
+	   <div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
 
     <div class="row">
@@ -198,8 +198,15 @@
     e.preventDefault();
   });
 
+  function dimOff() {
+    document.getElementById("plot-div").setAttribute("style", "-webkit-filter:brightness(100%);-moz-filter:brightness(100%);filter: url(#brightness);filter:brightness(100%);");
+}
+function dimOn() {
+    document.getElementById("plot-div").setAttribute("style", "-webkit-filter:brightness(50%);-moz-filter:brightness(50%);filter: url(#brightness);filter:brightness(50%);");
+  }
+
 function do_prediction(form) {
-	$("#loading_screen").show();
+  dimOn();
 	var form_obj = form;
   var dt = $("#datetimepicker").data("DateTimePicker").date();
   $("input[name='month']").replaceWith(
@@ -292,7 +299,7 @@ function do_prediction(form) {
 			console.log('ERRORS: ' + result);
 		},
 		complete: function() {
-			$("#loading_screen").hide();
+      dimOff();
 		}
 	});
 }
