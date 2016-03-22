@@ -32,7 +32,7 @@ import numpy as np
 sys.path.insert(1, '/usr/local/lib/python3.4/site-packages')
 from pythonprop.voaAreaRect import VOAAreaRect
 
-from .predictionParams import PredictionParams
+from proppy.predictionParams import PredictionParams
 
 class REC533Out:
     '''

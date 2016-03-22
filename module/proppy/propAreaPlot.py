@@ -36,7 +36,7 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 
 from mpl_toolkits.basemap import Basemap
 
-from propplot.rec533Out import REC533Out
+from proppy.rec533Out import REC533Out
 
 MainModule = "__init__"
 
