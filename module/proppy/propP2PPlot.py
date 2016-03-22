@@ -111,14 +111,12 @@ class PropP2PPlot:
     def do_plot(self, plot_type, dpi=150, cmap='jet', out_file=None, file_format='png'):
 
         try:
-            print(self.r533.get_p2p_plot_data(plot_type))
             muf_data, im_data, global_params = self.r533.get_p2p_plot_data(plot_type)
         except LookupError:
             print(muf_data)
             print(im_data)
             print(global_params)
             return
-        print('got to here')
 
         #points, plot_type, lons, lats, num_pts_lon, num_pts_lat, global_params, params = dataset
         #plot_dt, ssn, freq = params
@@ -322,7 +320,6 @@ def main(data_file):
         if args.about:
             pp.dump_metadata()
     else:
-        print('doing it')
         pp.do_plot(args.data_opt,
             cmap = args.cmap,
             file_format = args.file_format,

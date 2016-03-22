@@ -55,8 +55,6 @@ class REC533Out:
         self.pp, self.ssn, self.data_format_dict = self.parse_global_params()
         if self.prediction_type == 'AREA':
             self.datasets = self.build_dataset_list()
-        else:
-            print ("Looks like a p2p file")
         self.itr_ctr = -1
 
 
@@ -102,6 +100,7 @@ class REC533Out:
         col_rx_location_lat_pattern = re.compile("Column (\d+): Receiver latitude \(deg\)")
         col_rx_location_lon_pattern = re.compile("Column (\d+): Receiver longitude \(deg\)")
         col_snr_pattern = re.compile("Column (\d+): SNR - Median signal-to-noise ratio")
+        col_opmuf_pattern = re.compile("Column (\d+): OPMUF - Operation MUF \(MHz\)")
         col_opmuf10_pattern = re.compile("Column (\d+): OPMUF10 - 10% Operation MUF \(MHz\)")
 
         title_line_ptr = False
@@ -195,6 +194,10 @@ class REC533Out:
                 if m:
                     data_format_dict['OPMUF10'] = int(m.group(1)) - 1
                     continue
+                m = col_opmuf_pattern.match(line)
+                if m:
+                    data_format_dict['OPMUF'] = int(m.group(1)) - 1
+                    continue
                 if '*** Calculated Parameters ***' in line:
                     break
         #print (data_format_dict)
@@ -203,7 +206,7 @@ class REC533Out:
         else:
             self.prediction_type = 'AREA'
         extent = VOAAreaRect(sw_lat=lr_lat, sw_lon=ul_lon, ne_lat=ul_lat, ne_lon=lr_lon)
-        print(extent.get_formatted_string())
+        #print(extent.get_formatted_string())
         pp.plot_rect = extent
         return (pp, ssn, data_format_dict)
 
@@ -257,6 +260,7 @@ class REC533Out:
         mg = np.zeros([25, 29], float) # meshgrid (0-24) hours x num_freqs (2-30)
         try:
             data_column = self.data_format_dict[plot_type]
+            muf_column = self.data_format_dict['OPMUF']
         except KeyError:
             print("Error: Specified data set {:s} not found in file {:s}".format(plot_type, self.filename))
             raise LookupError
@@ -269,7 +273,7 @@ class REC533Out:
                     OPMUF[int(row[1])] = float(row[3])
                     #todo do a check that our array indexes are not out of range
                     # [hours][freq]
-                    mg[int(float(row[1]))][int(float(row[2]))-2] = float(row[4])
+                    mg[int(float(row[1]))][int(float(row[2]))-2] = float(row[data_column])
         finally:
             f.close()
         # rec533 hours are in the range 1-24, copy 24 -> 0
