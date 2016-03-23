@@ -172,7 +172,7 @@ class REC533Out:
                     continue
                 m = col_bcr_pattern.match(line)
                 if m:
-                    data_format_dict['REL'] = int(m.group(1)) - 1
+                    data_format_dict['BCR'] = int(m.group(1)) - 1
                     continue
                 m = col_e_pattern.match(line)
                 if m:

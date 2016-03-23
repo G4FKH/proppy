@@ -29,7 +29,7 @@
           <div class="col-sm-1">
             <label class="control-label">Date</label>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
           <div class='input-group date' id='datetimepicker'>
             <input type='text' class="form-control" name="date", required=true/>
               <span class="input-group-addon">
@@ -38,17 +38,24 @@
           </div>
         </div>
 
-         <div class="col-sm-2">
+         <div class="col-sm-1">
            {{p2p_form.sys_traffic.label(class="control-label")}}
          </div>
          <div class="col-sm-2">
            {{ p2p_form.sys_traffic(class="form-control", type="text") }}
          </div>
-         <div class="col-sm-2">
+         <div class="col-sm-1">
            {{p2p_form.sys_pwr.label(class="control-label")}}
          </div>
          <div class="col-sm-2">
            {{ p2p_form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+         </div>
+
+         <div class="col-sm-1">
+           {{p2p_form.sys_plot_type.label(class="control-label")}}
+         </div>
+         <div class="col-sm-2">
+           {{ p2p_form.sys_plot_type(class="form-control") }}
          </div>
        </div>
      </fieldset>
@@ -237,29 +244,23 @@ function do_prediction(form) {
 
     result['colorscale'] = 'Jet';
     //console.log(result);
-    //console.log(window.innerWidth);
 
     if (window.innerWidth >= 768) {
-      result['p']['colorbar'] = {
-        tickmode:'array',
-        tickvals:[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-        ticksuffix:'%',
-        title: 'Reliability (%)',
-        titleside: 'right',
-        titlefont: {
-          size: 14,
-          family: 'Arial, sans-serif'
-        }
+      var titlefont = {
+        size: 14,
+        family: 'Arial, sans-serif'
       };
+      result['p']['colorbar']['tickmode'] = 'array';
+      result['p']['colorbar']['titleside'] = 'right';
+      result['p']['colorbar']['titlefont'] = titlefont;
     } else {
       result['p']['colorbar'] = {
         tickmode:'array',
-        tickvals:[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
         thickness:10,
         xpad:4
       };
     }
-
+    //console.log(result['p']['colorbar']);
     var layout = {
       xaxis: {
         title: 'Time (UTC)',

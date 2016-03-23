@@ -13,10 +13,11 @@ from . import ajax
 
 @ajax.route('/predict', methods=['POST'])
 def predict():
-    print(request.form)
+    #print(request.form)
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
     sys_year = int(request.form['year'])
     sys_month = int(request.form['month'])
+    sys_plot_type = request.form['sys_plot_type']
 
     tx_name = request.form['tx_name'].strip()
     tx_lat = float(request.form['tx_lat'])
@@ -35,9 +36,6 @@ def predict():
     else:
         traffic = {'bw':3000, 'snr':13}
 
-    print(traffic['bw'])
-    print(traffic['snr'])
-
     input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
     input_file.write('PathName "Proppy Plot"\n')
     input_file.write('PathTXName "{:s}"\n'.format(tx_name))
@@ -47,8 +45,9 @@ def predict():
     input_file.write('TXGOS {:.2f}\n'.format(tx_gain))
 
     input_file.write('PathRXName "{:s}"\n'.format(rx_name))
-    input_file.write('Path.L_rx.lat {:.2f}\n'.format(rx_lat))
-    input_file.write('Path.L_rx.lon {:.2f}\n'.format(rx_lon))
+    #The following values are not actually required.
+    #input_file.write('Path.L_rx.lat {:.2f}\n'.format(rx_lat))
+    #input_file.write('Path.L_rx.lon {:.2f}\n'.format(rx_lon))
     input_file.write('RXAntFilePath "ISOTROPIC"\n')
     input_file.write('RXGOS {:.2f}\n'.format(rx_gain))
 
@@ -65,7 +64,7 @@ def predict():
     input_file.write('Path.ManMadeNoise "RURAL"\n')
     input_file.write('Path.Modulation "ANALOG"\n')
     input_file.write('Path.SorL "SHORTPATH"\n')
-    input_file.write('RptFileFormat "RPT_BCR | RPT_OPMUF"\n')
+    input_file.write('RptFileFormat "RPT_OPMUF | RPT_{:s}"\n'.format(sys_plot_type))
     input_file.write('LL.lat {:.2f}\n'.format(rx_lat))
     input_file.write('LL.lng {:.2f}\n'.format(rx_lon))
     input_file.write('LR.lat {:.2f}\n'.format(rx_lat))
@@ -78,17 +77,17 @@ def predict():
     input_file.close()
 
     FNULL = open(os.devnull, 'w')
-    output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out')
+    output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=True)
     subprocess.call(["wine",
         current_app.config['ITURHFPROP_APPLICATION_PATH'],
         input_file.name,
         output_file.name],
         stdout=FNULL,
         stderr=subprocess.STDOUT)
-    print(input_file.name)
-    print(output_file.name)
+    #print(input_file.name)
+    #print(output_file.name)
     prediction = REC533Out(output_file.name)
-    muf, mesh_grid, params = prediction.get_p2p_plot_data('REL')
+    muf, mesh_grid, params = prediction.get_p2p_plot_data(sys_plot_type)
     #print(params.title)
     mesh_grid = np.flipud(np.rot90(mesh_grid))
 
@@ -101,16 +100,35 @@ def predict():
         'type':'scatter'}
 
     #print(mesh_grid)
+    if sys_plot_type == 'BCR':
+        zmax = 100
+        zmin = 0
+        rel_cb_dict = {'tickvals' : [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                    'title' : 'Reliability (%)',
+                    'ticksuffix' : '%'}
+    elif sys_plot_type == 'E':
+        zmax = 60
+        zmin = -40
+        rel_cb_dict = {'tickvals' : [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60],
+                    'title': 'Signal Strength dB(1uV/m)'}
+
+    elif sys_plot_type == 'SNR':
+        zmax = 50
+        zmin = -30
+        rel_cb_dict = {'tickvals' : [-30, -20, -10, 0, 10, 20, 30, 40, 50],
+                    'title': 'SNR (dB)'}
+
     p = {'z':mesh_grid.tolist(),
         'x':list(range(0,25)),
         'y':list(range(2,31)),
         'type':'contour',
         'colorscale': 'Jet',
         'autocolorscale': False,
-        'zmax':100,
-        'zmin':0
+        'zmax':zmax,
+        'zmin':zmin,
+        'colorbar': rel_cb_dict
     }
-
+    #print(p)
     response = {'m':m, 'p':p}
     os.remove(input_file.name)
     return jsonify(**response)
