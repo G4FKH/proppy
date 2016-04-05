@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Proppy{% endblock %}
+{% block title %}Online Rec. P.533-13 Propagation Prediction{% endblock %}
 
 {% block head %}
   {{ super() }}
-	<!-- Plotly.js -->
-	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+  <meta name="description" content="Online HF propagation prediction using the ITU Recommendation P.533-13 Propagation Prediction Application.">
 {% endblock %}
 
 {% block page_content %}
@@ -13,11 +13,66 @@
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Area</small></h1>
 	</div>
-	<div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
+	<div id="plot-div">
+  </div>
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
 
     <div class="row">
+        <div class="col-sm-12">
+          <fieldset>
+            <legend>System</legend>
+            <!-- https://github.com/eternicode/bootstrap-datepicker -->
+        <input type="hidden" name="hour" />
+        <input type="hidden" name="month" />
+        <input type="hidden" name="year" />
+        <div class='row'>
 
+        <div class="form-group">
+          <div class="col-sm-1">
+            {{ form.sys_plot_type.label(class="control-label")}}
+          </div>
+          <div class="col-sm-4">
+            {{ form.sys_plot_type(class="form-control") }}
+          </div>
+
+          <div class="col-sm-1">
+            <label class="control-label">Time</label>
+          </div>
+          <div class="col-sm-4">
+            <div class='input-group date' id='datetimepicker'>
+              <input type='text' class="form-control" name="date", required=true/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+          <div class='row'>
+            <div class="col-sm-1">
+              {{ form.sys_freq.label(class="control-label")}}
+            </div>
+            <div class="col-sm-2">
+              {{ form.sys_freq(class="form-control", type="number", value="10.0", min="2.0", max="30.0", step="0.05", required=true) }}
+            </div>
+            <div class="col-sm-1">
+              {{ form.sys_traffic.label(class="control-label")}}
+            </div>
+            <div class="col-sm-2">
+              {{ form.sys_traffic(class="form-control", type="text") }}
+            </div>
+         <div class="col-sm-1">
+           {{ form.sys_pwr.label(class="control-label")}}
+         </div>
+         <div class="col-sm-2">
+           {{ form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+         </div>
+       </div>
+       </div> <!-- end of row -->
+     </fieldset>
+      </div>
+    </div>
+
+    <div class="row">
     <!-- tx params -->
     <div class="col-sm-6">
       <fieldset>
@@ -26,10 +81,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{area_form.tx_name.label(class="control-label")}}
+              {{ form.tx_name.label(class="control-label") }}
             </div>
             <div class="col-sm-9">
-              {{ area_form.tx_name(class="form-control", type="text") }}
+              {{ form.tx_name(class="form-control", type="text") }}
             </div>
           </div>
         </div>
@@ -37,10 +92,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{area_form.tx_lat.label(class="control-label")}}
+              {{ form.tx_lat.label(class="control-label")}}
             </div>
             <div class="col-sm-9">
-              {{ area_form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+              {{ form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
             </div>
           </div>
         </div>
@@ -48,10 +103,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{area_form.tx_lon.label(class="control-label")}}
+              {{ form.tx_lon.label(class="control-label")}}
             </div>
             <div class="col-sm-9">
-              {{ area_form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+              {{ form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
             </div>
           </div>
         </div>
@@ -59,15 +114,19 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{area_form.tx_pwr.label(class="control-label")}}
+              {{ form.tx_gain.label(class="control-label")}}
             </div>
             <div class="col-sm-9">
-              {{ area_form.tx_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+              {{ form.tx_gain(class="form-control", type="number", min="0", max="20.0", step="0.01", value="2.16", required=true) }}
             </div>
           </div>
         </div>
+
+
       </fieldset>
     </div> <!-- end of tx params -->
+
+
   </div> <!-- end of input params row -->
 
   <div class="row">
@@ -84,83 +143,86 @@
 
 {% block scripts %}
 {{ super() }}
+
+<!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+<!--<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
 <script>
-$( '#parameters_form' ).submit( function( e ) {
+
+  $(function () {
+    //var dateNow = new Date.();
+    var date = new Date();
+    var dateNow = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    $('#datetimepicker').datetimepicker({
+      format: 'HH:00 MMM YYYY',
+      minDate : moment("{{min_year}} {{min_month}}", "YYYY MM"),
+      maxDate : moment("{{max_year}} {{max_month}}", "YYYY MM"),
+      defaultDate:dateNow
+    });
+  });
+
+  $( '#parameters_form' ).submit( function( e ) {
     do_prediction(e.target);
     e.preventDefault();
   });
 
+  function dimOff() {
+    document.getElementById("plot-div").setAttribute("style", "-webkit-filter:brightness(100%);-moz-filter:brightness(100%);filter: url(#brightness);filter:brightness(100%);");
+}
+function dimOn() {
+    document.getElementById("plot-div").setAttribute("style", "-webkit-filter:brightness(50%);-moz-filter:brightness(50%);filter: url(#brightness);filter:brightness(50%);");
+  }
+
 function do_prediction(form) {
-	$("#loading_screen").show();
+  dimOn();
 	var form_obj = form;
-	//var form_obj = $(form);
-	var form_url = $(form_obj).attr("action");
+  var dt = $("#datetimepicker").data("DateTimePicker").date();
+  $("input[name='hour']").replaceWith(
+    $('<input>').attr({
+      type: 'hidden',
+      name: 'hour',
+      value: dt.format("H")
+    })
+  );
+  $("input[name='month']").replaceWith(
+    $('<input>').attr({
+      type: 'hidden',
+      name: 'month',
+      value: dt.format("M")
+    })
+  );
+  $("input[name='year']").replaceWith(
+    $('<input>').attr({
+      type: 'hidden',
+      name: 'year',
+      value: dt.format("YYYY")
+    })
+  );
+  var form_url = $(form_obj).attr("action");
 	var form_data = new FormData(form);
 	$.ajax( {
 		url: form_url,
 		type: 'POST',
 		data: form_data,
-    dataType: "json",
 		mimeType: "multipart/form-data",
 		processData: false,
 		contentType: false,
-		success: function(result) {
-
-    console.log("success");
-
-    result['colorscale'] = 'Jet';
-    result['colorbar'] = {
-      title: 'Reliability (%)',
-      titleside: 'right',
-      titlefont: {
-        size: 14,
-        family: 'Arial, sans-serif'
-      }
-    };
-
-    var layout = {
-    showlegend: false,
-    geo: {
-        resolution: 5,
-        showland: true,
-        showlakes: false,
-        landcolor: 'rgb(204, 204, 204)',
-
-        coastlinewidth: 1,
-        lataxis: {
-          range: [ -90, 90 ],
-          showgrid: false
-        },
-        lonaxis:{
-          range: [-180, 180],
-          showgrid: false
-        }
-      }
-  };
-
-   var data = [{
-      type: 'scattergeo',
-      lat: [ 40.7127, 51.5072 ],
-      lon: [ -74.0059, 0.1275 ],
-      mode: 'lines',
-      line:{
-          width: 2,
-          color: 'blue'
-      }
-    }];
-    Plotly.newPlot('plot-div', [result['p']], layout);
-    //Plotly.newPlot('plot-div', [result['p']], layout);
+		success: function(img_url) {
+      $('#plot-div').html('<img src="'+img_url+'" >');
     },
-		error: function(result) {
-			// Handle errors here
-			//
+	  error: function(result) {
 			ajax_complete_msg = "Error";
 			console.log('ERRORS: ' + result);
 		},
 		complete: function() {
-			$("#loading_screen").hide();
+      dimOff();
 		}
 	});
 }
+
+
+
 </script>
 {% endblock %}

@@ -21,7 +21,13 @@ def p2p_predict():
 @main.route('/area')
 def area_predict():
     area_form = AreaForm()
-    return render_template('area.html', area_form=area_form)
+    min_year = current_app.config['MIN_YEAR']
+    min_month = current_app.config['MIN_MONTH']
+    max_year = current_app.config['MAX_YEAR']
+    max_month = current_app.config['MAX_MONTH']
+
+    return render_template('area.html', form=area_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year)
+
 
 @main.route('/sitemap.xml', methods=['GET'])
 def sitemap():

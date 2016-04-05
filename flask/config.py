@@ -9,6 +9,8 @@ class Config:
     ITURHFPROP_DATA_PATH = '/usr/local/share/ituhfprop/Data/'
     SSN_DATA_PATH = '/home/jwatson/github/proppy/ssn.json'
 
+    AREA_PLOT_DIR_PATH = '/home/jwatson/github/proppy/flask/app/static/img/area/'
+
     with open(SSN_DATA_PATH) as ssn_data_file:
         SSN_DATA = json.load(ssn_data_file)
 

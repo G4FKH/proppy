@@ -4,10 +4,12 @@ import os
 import subprocess
 
 from math import log10
-from flask import request, current_app, jsonify
+from flask import request, current_app, jsonify, url_for
 from tempfile import NamedTemporaryFile
 
 from proppy.rec533Out import REC533Out
+from proppy.propAreaPlot import PropAreaPlot
+
 
 from . import ajax
 
@@ -133,85 +135,84 @@ def predict():
     os.remove(input_file.name)
     return jsonify(**response)
 
-# http://nbviewer.jupyter.org/github/etpinard/plotly-misc-nbs/blob/etienne/plotly-maps.ipynb
-# https://www.udacity.com/course/viewer#!/c-ud507/l-3066258748/m-3166498678
 
 @ajax.route('/areapredict', methods=['POST'])
 def areapredict():
     print(request.form)
+    sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
+    sys_year = int(request.form['year'])
+    sys_month = int(request.form['month'])
+    sys_plot_type = request.form['sys_plot_type']
+    sys_hour = int(request.form['hour'])
+    sys_freq = float(request.form['sys_freq'])
+
     tx_name = request.form['tx_name'].strip()
     tx_lat = float(request.form['tx_lat'])
     tx_lon = float(request.form['tx_lon'])
-    tx_pwr = 10 * log10(float(request.form['tx_pwr'])/1000.0)
+    tx_gain = float(request.form['tx_gain'])
+
+    ssn = current_app.config['SSN_DATA'][str(sys_year)]['{:d}'.format(sys_month)]
+
+    if request.form['sys_traffic'] == 'cw':
+        traffic = {'bw':1000, 'snr':0}
+    else:
+        traffic = {'bw':3000, 'snr':13}
 
     input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
-    print(input_file.name)
     input_file.write('PathName "Proppy Plot"\n')
     input_file.write('PathTXName "{:s}"\n'.format(tx_name))
     input_file.write('Path.L_tx.lat {:.2f}\n'.format(tx_lat))
     input_file.write('Path.L_tx.lng {:.2f}\n'.format(tx_lon))
     input_file.write('TXAntFilePath "ISOTROPIC"\n')
-    input_file.write('TXGOS 2.16\n')
+    input_file.write('TXGOS {:.2f}\n'.format(tx_gain))
 
+    input_file.write('PathRXName "World"\n')
     input_file.write('RXAntFilePath "ISOTROPIC"\n')
-    input_file.write('RXGOS 2.16\n')
+    input_file.write('RXGOS {:.2f}\n'.format(2.12))
 
     input_file.write('AntennaOrientation "TX2RX"\n')
-    input_file.write('Path.year {:d}\n'.format(2016))
-    input_file.write('Path.month  {:d}\n'.format(3))
-    input_file.write('Path.hour {:d}\n'.format(12))
-    input_file.write('Path.SSN {:d}\n'.format(42))
-    input_file.write('Path.frequency {:.2f}\n'.format(11.33))
-    input_file.write('Path.txpower {:.2f}\n'.format(tx_pwr))
-    input_file.write('Path.BW 3000.0\n')
-    input_file.write('Path.SNRr 18.0\n')
+    input_file.write('Path.year {:d}\n'.format(sys_year))
+    input_file.write('Path.month  {:d}\n'.format(sys_month))
+    input_file.write('Path.hour {:d}\n'.format(sys_hour))
+    input_file.write('Path.SSN {:.2f}\n'.format(float(ssn)))
+    input_file.write('Path.frequency {:.2f}\n'.format(sys_freq))
+    input_file.write('Path.txpower {:.2f}\n'.format(sys_pwr))
+    input_file.write('Path.BW {:.1f}\n'.format(traffic['bw']))
+    input_file.write('Path.SNRr {:.1f}\n'.format(traffic['snr']))
     input_file.write('Path.Relr 90\n')
     input_file.write('Path.ManMadeNoise "RURAL"\n')
     input_file.write('Path.Modulation "ANALOG"\n')
     input_file.write('Path.SorL "SHORTPATH"\n')
-    input_file.write('RptFileFormat "RPT_RXLOCATION | RPT_SNR | RPT_BCR | RPT_E | RPT_OPMUFD"\n')
-    input_file.write('LL.lat -90\n')
-    input_file.write('LL.lng -180\n')
-    input_file.write('LR.lat -90\n')
-    input_file.write('LR.lng 180\n')
-    input_file.write('UL.lat 90\n')
-    input_file.write('UL.lng -180\n')
-    input_file.write('UR.lat 90\n')
-    input_file.write('UR.lng 180\n')
-    input_file.write('latinc  30.0\n')
-    input_file.write('lnginc  30.0\n')
+    input_file.write('RptFileFormat "RPT_RXLOCATION | RPT_{:s}"\n'.format(sys_plot_type))
+    input_file.write('LL.lat -90.0\n')
+    input_file.write('LL.lng -180.0\n')
+    input_file.write('LR.lat -90.0\n')
+    input_file.write('LR.lng 180.0\n')
+    input_file.write('UL.lat 90.0\n')
+    input_file.write('UL.lng -180.0\n')
+    input_file.write('UR.lat 90.0\n')
+    input_file.write('UR.lng 180.0\n')
+    input_file.write('latinc  10.0\n')
+    input_file.write('lnginc  10.0\n')
+
     input_file.write('DataFilePath "{:s}"\n'.format(current_app.config['ITURHFPROP_DATA_PATH']))
     input_file.close()
+    print(input_file.name)
 
     FNULL = open(os.devnull, 'w')
-    output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out')
+    output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=False)
     subprocess.call(["wine",
         current_app.config['ITURHFPROP_APPLICATION_PATH'],
         input_file.name,
         output_file.name],
         stdout=FNULL,
         stderr=subprocess.STDOUT)
-    print(output_file.name)
-    prediction = REC533Out(output_file.name)
-    mesh_grid, plot_type, lons, lats, num_pts_lon, num_pts_lat, pp, (plot_dt, ssn, freq) = prediction.get_plot_data(0, 'REL')
-    print(mesh_grid)
-    #mesh_grid = np.flipud(np.rot90(mesh_grid))
-    #TODO the static components of the json would be better added at the
-    # client side...
-
-    #print(mesh_grid)
-    p = {'z':mesh_grid.tolist(),
-        'x':list(lons),
-        'y':list(lats),
-        'opacity':0.8,
-        'type':'contour',
-        'colorscale': 'Jet',
-        'colorbar':{'ticksuffix':'%',
-                'title':'Reliability',
-                'tickmode':'array',
-                'tickvals':[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-            }
-        }
-
-    response = {'p':p}
-    return jsonify(**response)
+    #print(output_file.name)
+    pap = PropAreaPlot(output_file.name)
+    png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.png', dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
+    pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, out_file=png_file.name)
+    os.remove(input_file.name)
+    os.remove(output_file.name)
+    #print(png_file.name)
+    #print (url_for('static', filename='img/area/'+os.path.basename(png_file.name)+'.png'))
+    return (url_for('static', filename='img/area/'+os.path.basename(png_file.name)+'.png'))
