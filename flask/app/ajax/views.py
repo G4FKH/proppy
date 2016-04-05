@@ -209,7 +209,7 @@ def areapredict():
         stderr=subprocess.STDOUT)
     #print(output_file.name)
     pap = PropAreaPlot(output_file.name)
-    png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.png', dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
+    png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
     pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, out_file=png_file.name)
     os.remove(input_file.name)
     os.remove(output_file.name)
