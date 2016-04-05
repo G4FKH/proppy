@@ -138,7 +138,7 @@ def predict():
 
 @ajax.route('/areapredict', methods=['POST'])
 def areapredict():
-    print(request.form)
+    #print(request.form)
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
     sys_year = int(request.form['year'])
     sys_month = int(request.form['month'])
@@ -197,7 +197,7 @@ def areapredict():
 
     input_file.write('DataFilePath "{:s}"\n'.format(current_app.config['ITURHFPROP_DATA_PATH']))
     input_file.close()
-    print(input_file.name)
+    #print(input_file.name)
 
     FNULL = open(os.devnull, 'w')
     output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=False)
@@ -209,10 +209,12 @@ def areapredict():
         stderr=subprocess.STDOUT)
     #print(output_file.name)
     pap = PropAreaPlot(output_file.name)
-    png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
-    pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, out_file=png_file.name)
+    png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix=".png", dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
+    png_file_base = os.path.splitext(png_file.name)[0]
+    #print(png_file_base)
+    pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, out_file=os.path.splitext(png_file.name)[0])
     os.remove(input_file.name)
     os.remove(output_file.name)
     #print(png_file.name)
-    #print (url_for('static', filename='img/area/'+os.path.basename(png_file.name)+'.png'))
-    return (url_for('static', filename='img/area/'+os.path.basename(png_file.name)+'.png'))
+    #print (url_for('static', filename='img/area/'+os.path.basename(png_file.name)))
+    return (url_for('static', filename='img/area/'+os.path.basename(png_file.name)))
