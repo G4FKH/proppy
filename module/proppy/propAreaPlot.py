@@ -44,7 +44,7 @@ class PropAreaPlot:
 
     IMG_TYPE_DICT  = { \
         'MUF':{'title':('MUF'), 'vmin':2, 'vmax':30, 'step':5, 'formatter':'frequency_format'}, \
-        'REL':{'title':('Reliability'), 'vmin':0, 'vmax':100, 'step':10, 'formatter':'percent_format'}, \
+        'BCR':{'title':('Reliability'), 'vmin':0, 'vmax':100, 'step':10, 'formatter':'percent_format'}, \
         'E':{'title':'S-Meter', 'y_labels':[-14.0, -8.18, -2.16, 3.86, 9.1, 15.92, 21.94, 27.96, 33.98], 'formatter':'smtr_format'}, \
         'SNR':{'title':('SNR'), 'vmin':-10, 'vmax':70, 'step':10,'formatter':'SNR_format' }}
 
