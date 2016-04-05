@@ -210,7 +210,7 @@ function do_prediction(form) {
 		processData: false,
 		contentType: false,
 		success: function(img_url) {
-      $('#plot-div').html('<img src="'+img_url+'" >');
+      $('#plot-div').html('<img src="'+img_url+'" class="img-responsive">');
     },
 	  error: function(result) {
 			ajax_complete_msg = "Error";
