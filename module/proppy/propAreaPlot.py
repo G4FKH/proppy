@@ -168,7 +168,7 @@ class PropAreaPlot:
         #pythonProp subtitle
         #sub_title = "{:s} - {:s} - SSN:{:.1f} - {:.3f}MHz - {:s} - {:.0f}W".format(plot_params['title'], plot_dt.strftime(ds_fmt_str), ssn, float(freq), tx_ant_str, global_params.tx_pwr)
         #RSGB subtitle
-        sub_title = "{:s} {:.0f}MHz {:s} SIDC ($\mathregular{{R_{{12}}}}$): {:.1f} {:s} {:.0f}W".format(plot_params['title'], float(freq), plot_dt.strftime(ds_fmt_str), ssn, tx_ant_str, global_params.tx_pwr)
+        sub_title = "{:s} {:.0f}MHz {:s} $\mathregular{{R_{{12}}}}$: {:.1f} {:s} {:.0f}W".format(plot_params['title'], float(freq), plot_dt.strftime(ds_fmt_str), ssn, tx_ant_str, global_params.tx_pwr)
 
         plt.figtext(0.5, 0.8, main_title, fontsize=18, ha='center')
         plt.figtext(0.5, 0.76,sub_title,fontsize=10, fontstyle='normal', ha='center')
