@@ -212,8 +212,7 @@ def areapredict():
     png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix=".png", dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
     png_file_base = os.path.splitext(png_file.name)[0]
     #print(png_file_base)
-    if sys_plot_type == 'BCR':
-        sys_plot_type = 'REL'
+
     pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, out_file=os.path.splitext(png_file.name)[0])
     os.remove(input_file.name)
     os.remove(output_file.name)
