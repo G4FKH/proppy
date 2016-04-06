@@ -144,6 +144,8 @@ def areapredict():
     sys_month = int(request.form['month'])
     sys_plot_type = request.form['sys_plot_type']
     sys_hour = int(request.form['hour'])
+    if sys_hour == 0:
+        sys_hour = 24
     sys_freq = float(request.form['sys_freq'])
 
     tx_name = request.form['tx_name'].strip()
