@@ -18,124 +18,135 @@
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
 
     <div class="row">
-        <div class="col-sm-12">
-          <fieldset>
-            <legend>System</legend>
+      <div class="col-sm-6">
+        <fieldset>
+          <legend>System</legend>
             <!-- https://github.com/eternicode/bootstrap-datepicker -->
-        <input type="hidden" name="hour" />
-        <input type="hidden" name="month" />
-        <input type="hidden" name="year" />
-        <div class='row'>
-
-        <div class="form-group">
-          <div class="col-sm-1">
-            {{ form.sys_plot_type.label(class="control-label")}}
-          </div>
-          <div class="col-sm-4">
-            {{ form.sys_plot_type(class="form-control") }}
-          </div>
-
-          <div class="col-sm-1">
-            <label class="control-label">Time</label>
-          </div>
-          <div class="col-sm-4">
-            <div class='input-group date' id='datetimepicker'>
-              <input type='text' class="form-control" name="date", required=true/>
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-              </span>
-            </div>
-          </div>
-        </div>
+          <input type="hidden" name="hour" />
+          <input type="hidden" name="month" />
+          <input type="hidden" name="year" />
           <div class='row'>
-            <div class="col-sm-1">
-              {{ form.sys_freq.label(class="control-label")}}
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.sys_plot_type.label(class="control-label")}}
+              </div>
+              <div class="col-sm-9">
+                {{ form.sys_plot_type(class="form-control") }}
+              </div>
             </div>
-            <div class="col-sm-2">
-              {{ form.sys_freq(class="form-control", type="number", value="10.0", min="2.0", max="30.0", step="0.05", required=true) }}
+          </div>
+
+          <div class='row'>
+            <div class="form-group">
+              <div class="col-sm-3">
+                <label class="control-label">Time</label>
+              </div>
+              <div class="col-sm-9">
+                <div class='input-group date' id='datetimepicker'>
+                  <input type='text' class="form-control" name="date", required=true/>
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
             </div>
-            <div class="col-sm-1">
-              {{ form.sys_traffic.label(class="control-label")}}
+          </div>
+
+          <div class='row'>
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.sys_traffic.label(class="control-label")}}
+              </div>
+              <div class="col-sm-9">
+                {{ form.sys_traffic(class="form-control", type="text") }}
+              </div>
             </div>
-            <div class="col-sm-2">
-              {{ form.sys_traffic(class="form-control", type="text") }}
+          </div>
+
+          <div class='row'>
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.sys_freq.label(class="control-label")}}
+              </div>
+              <div class="col-sm-5">
+                {{ form.sys_freq(class="form-control", type="number", value="10.0", min="2.0", max="30.0", step="0.05", required=true) }}
+              </div>
             </div>
-         <div class="col-sm-1">
-           {{ form.sys_pwr.label(class="control-label")}}
-         </div>
-         <div class="col-sm-2">
-           {{ form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
-         </div>
-       </div>
-       </div> <!-- end of row -->
-     </fieldset>
+          </div>
+
+          <div class='row'>
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.sys_pwr.label(class="control-label")}}
+              </div>
+              <div class="col-sm-5">
+               {{ form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+              </div>
+            </div>
+          </div> <!-- end of row -->
+        </fieldset>
       </div>
-    </div>
+
+      <!-- tx params -->
+      <div class="col-sm-6">
+        <fieldset>
+          <legend>Tx. Site</legend>
+
+          <div class="row">
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.tx_name.label(class="control-label") }}
+              </div>
+              <div class="col-sm-9">
+                {{ form.tx_name(class="form-control", type="text") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.tx_lat.label(class="control-label")}}
+              </div>
+              <div class="col-sm-5">
+                {{ form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.tx_lon.label(class="control-label")}}
+              </div>
+              <div class="col-sm-5">
+                {{ form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <div class="col-sm-3">
+                {{ form.tx_gain.label(class="control-label")}}
+              </div>
+              <div class="col-sm-5">
+                {{ form.tx_gain(class="form-control", type="number", min="0", max="20.0", step="0.01", value="2.16", required=true) }}
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </div> <!-- end of tx params -->
+    </div> <!-- end of input params row -->
 
     <div class="row">
-    <!-- tx params -->
-    <div class="col-sm-6">
-      <fieldset>
-        <legend>Tx. Site</legend>
-
-        <div class="row">
-          <div class="form-group">
-            <div class="col-sm-3">
-              {{ form.tx_name.label(class="control-label") }}
-            </div>
-            <div class="col-sm-9">
-              {{ form.tx_name(class="form-control", type="text") }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <div class="col-sm-3">
-              {{ form.tx_lat.label(class="control-label")}}
-            </div>
-            <div class="col-sm-9">
-              {{ form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <div class="col-sm-3">
-              {{ form.tx_lon.label(class="control-label")}}
-            </div>
-            <div class="col-sm-9">
-              {{ form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <div class="col-sm-3">
-              {{ form.tx_gain.label(class="control-label")}}
-            </div>
-            <div class="col-sm-9">
-              {{ form.tx_gain(class="form-control", type="number", min="0", max="20.0", step="0.01", value="2.16", required=true) }}
-            </div>
-          </div>
-        </div>
-
-
-      </fieldset>
-    </div> <!-- end of tx params -->
-
-
-  </div> <!-- end of input params row -->
-
-  <div class="row">
-    <div class="form-group">
-       <div class="col-sm-1">
-         <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
-       </div>
+      <div class="form-group">
+         <div class="col-sm-1">
+           <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+         </div>
+      </div>
     </div>
-  </div>
 
 	</form>
 </div>
