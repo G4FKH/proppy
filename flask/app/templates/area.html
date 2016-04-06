@@ -191,14 +191,18 @@
   });
 
   function dimOff() {
-    document.getElementById("plot-div").setAttribute("style", "-webkit-filter:brightness(100%);-moz-filter:brightness(100%);filter: url(#brightness);filter:brightness(100%);");
+    $('#plot-div').attr("style", "-webkit-filter:brightness(100%);-moz-filter:brightness(100%);filter: url(#brightness);filter:brightness(100%);");
 }
 function dimOn() {
-    document.getElementById("plot-div").setAttribute("style", "-webkit-filter:brightness(50%);-moz-filter:brightness(50%);filter: url(#brightness);filter:brightness(50%);");
+    $('#plot-div').attr("style", "-webkit-filter:brightness(50%);-moz-filter:brightness(50%);filter: url(#brightness);filter:brightness(50%);");
   }
 
 function do_prediction(form) {
-  dimOn();
+  if ( $('#plot-div').children().length == 0 ) {
+    $('#plot-div').html('<p>Calculating</p>');
+  } else {
+    dimOn();
+  }
 	var form_obj = form;
   var dt = $("#datetimepicker").data("DateTimePicker").date();
   $("input[name='hour']").replaceWith(
