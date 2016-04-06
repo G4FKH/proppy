@@ -23,9 +23,9 @@ class P2PForm(Form):
 
 
 class AreaForm(Form):
-    sys_pwr = DecimalField("Pwr.(W)")
+    sys_pwr = DecimalField("Power (W)")
     sys_traffic = SelectField("Traffic", choices=[('cw', 'CW (BW=500Hz / SNR=0dB)'), ('ssb', 'SSB (BW=3kHz / SNR=13dB)')])
-    sys_plot_type = SelectField("Plot", choices=[('BCR', 'Reliability'), ('SNR', 'SNR'), ('E', 'Signal Strength')])
+    sys_plot_type = SelectField("Plot Type", choices=[('BCR', 'Reliability'), ('SNR', 'SNR'), ('E', 'Signal Strength')])
     sys_freq = DecimalField("Freq (MHz)")
 
     tx_name = StringField("Name")
