@@ -109,7 +109,12 @@
                 {{ form.tx_lat.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
-                {{ form.tx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="0.01", required=true) }}
+                {{ form.tx_lat(class="form-control", id="lat-field", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+              </div>
+              <div>
+                <button id="geolocation-button" type="button" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
+                </button>
               </div>
             </div>
           </div>
@@ -120,7 +125,7 @@
                 {{ form.tx_lon.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
-                {{ form.tx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="0.01", required=true) }}
+                {{ form.tx_lon(class="form-control", id="lon-field", type="number", min="-180.0", max="180.0", step="any", required=true) }}
               </div>
             </div>
           </div>
@@ -155,12 +160,19 @@
 {% block scripts %}
 {{ super() }}
 
-<!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
-<!--<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+
+  $('#geolocation-button').on('click', function (e) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  })
+
+  function showPosition(position) {
+    document.getElementById("lat-field").value = position.coords.latitude;
+    document.getElementById("lon-field").value = position.coords.longitude;
+  }
 
   $(function () {
     //var dateNow = new Date.();
