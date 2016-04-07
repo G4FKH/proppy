@@ -19,17 +19,19 @@ fieldset legend {
   border-bottom:none;
 }
 
-.darkClass {
-  background-color: grey;
-  filter:alpha(opacity=50); /* IE */
-  opacity: 0.5; /* Safari, Opera */
-  -moz-opacity:0.50; /* FireFox */
-  z-index: 20;
-  /*height: 100%;
-  width: 100%;
-  background-repeat:no-repeat;
-  background-position:center;
-  position:absolute;
-  top: 0px;
-  left: 0px;*/
+
+/* Ajax dimming */
+#ajaxSpinnerContainer {
+    background-color: #333;
+    opacity: 0.5;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-image: url('../img/ajax-loader.gif');
+    background-position: center;
+    background-repeat: no-repeat;
 }

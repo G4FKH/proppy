@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block page_content %}
+<div id="ajaxSpinnerContainer" style="display:none"></div>
 <div class="container" style="max-width: 970px;">
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Area</small></h1>
@@ -163,7 +164,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
-
   $('#geolocation-button').on('click', function (e) {
     navigator.geolocation.getCurrentPosition(showPosition);
   })
@@ -185,70 +185,62 @@
     });
   });
 
+  $(document)
+  .ajaxStart(function(){
+      $("#ajaxSpinnerContainer").show();
+  })
+  .ajaxStop(function(){
+      $("#ajaxSpinnerContainer").hide();
+  });
+
+
   $( '#parameters_form' ).submit( function( e ) {
     do_prediction(e.target);
     e.preventDefault();
   });
 
-  function dimOff() {
-    $('#plot-div').attr("style", "-webkit-filter:brightness(100%);-moz-filter:brightness(100%);filter: url(#brightness);filter:brightness(100%);");
-}
-function dimOn() {
-    $('#plot-div').attr("style", "-webkit-filter:brightness(50%);-moz-filter:brightness(50%);filter: url(#brightness);filter:brightness(50%);");
+
+  function do_prediction(form) {
+  	var form_obj = form;
+    var dt = $("#datetimepicker").data("DateTimePicker").date();
+    $("input[name='hour']").replaceWith(
+      $('<input>').attr({
+        type: 'hidden',
+        name: 'hour',
+        value: dt.format("H")
+      })
+    );
+    $("input[name='month']").replaceWith(
+      $('<input>').attr({
+        type: 'hidden',
+        name: 'month',
+        value: dt.format("M")
+      })
+    );
+    $("input[name='year']").replaceWith(
+      $('<input>').attr({
+        type: 'hidden',
+        name: 'year',
+        value: dt.format("YYYY")
+      })
+    );
+    var form_url = $(form_obj).attr("action");
+  	var form_data = new FormData(form);
+  	$.ajax( {
+  		url: form_url,
+  		type: 'POST',
+  		data: form_data,
+  		mimeType: "multipart/form-data",
+  		processData: false,
+  		contentType: false,
+  		success: function(img_url) {
+        $('#plot-div').html('<img src="'+img_url+'" class="img-responsive">');
+      },
+  	  error: function(result) {
+  			ajax_complete_msg = "Error";
+  			console.log('ERRORS: ' + result);
+  		},
+  	});
   }
-
-function do_prediction(form) {
-  if ( $('#plot-div').children().length == 0 ) {
-    $('#plot-div').html('<p>Calculating</p>');
-  } else {
-    dimOn();
-  }
-	var form_obj = form;
-  var dt = $("#datetimepicker").data("DateTimePicker").date();
-  $("input[name='hour']").replaceWith(
-    $('<input>').attr({
-      type: 'hidden',
-      name: 'hour',
-      value: dt.format("H")
-    })
-  );
-  $("input[name='month']").replaceWith(
-    $('<input>').attr({
-      type: 'hidden',
-      name: 'month',
-      value: dt.format("M")
-    })
-  );
-  $("input[name='year']").replaceWith(
-    $('<input>').attr({
-      type: 'hidden',
-      name: 'year',
-      value: dt.format("YYYY")
-    })
-  );
-  var form_url = $(form_obj).attr("action");
-	var form_data = new FormData(form);
-	$.ajax( {
-		url: form_url,
-		type: 'POST',
-		data: form_data,
-		mimeType: "multipart/form-data",
-		processData: false,
-		contentType: false,
-		success: function(img_url) {
-      $('#plot-div').html('<img src="'+img_url+'" class="img-responsive">');
-    },
-	  error: function(result) {
-			ajax_complete_msg = "Error";
-			console.log('ERRORS: ' + result);
-		},
-		complete: function() {
-      dimOff();
-		}
-	});
-}
-
-
-
 </script>
 {% endblock %}
