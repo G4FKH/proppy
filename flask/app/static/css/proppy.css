@@ -21,7 +21,7 @@ fieldset legend {
 
 
 /* Ajax dimming */
-#ajaxSpinnerContainer {
+#ajax-spinner {
     background-color: #333;
     opacity: 0.5;
     position: fixed;

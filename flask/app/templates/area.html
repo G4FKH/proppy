@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block page_content %}
-<div id="ajaxSpinnerContainer" style="display:none"></div>
+<div id="ajax-spinner" style="display:none"></div>
 <div class="container" style="max-width: 970px;">
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Area</small></h1>
@@ -187,10 +187,10 @@
 
   $(document)
   .ajaxStart(function(){
-      $("#ajaxSpinnerContainer").show();
+      $("#ajax-spinner").show();
   })
   .ajaxStop(function(){
-      $("#ajaxSpinnerContainer").hide();
+      $("#ajax-spinner").hide();
   });
 
 
