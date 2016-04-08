@@ -302,8 +302,8 @@ def areapredicttest():
     #mesh_grid = np.flipud(np.rot90(mesh_grid))
 
     p = {'z':mesh_grid.tolist(),
-        'x':list(range(0,25)),
-        'y':list(range(2,31)),
+        'x':lons.tolist(),
+        'y':lats.tolist(),
         'type':'contour',
         'colorscale': 'Jet',
         'autocolorscale': False
