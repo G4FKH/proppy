@@ -29,6 +29,17 @@ def area_predict():
     return render_template('area.html', form=area_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year)
 
 
+@main.route('/areatest')
+def area_predict_test():
+    area_form = AreaForm()
+    min_year = current_app.config['MIN_YEAR']
+    min_month = current_app.config['MIN_MONTH']
+    max_year = current_app.config['MAX_YEAR']
+    max_month = current_app.config['MAX_MONTH']
+
+    return render_template('areatest.html', form=area_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year)
+
+
 @main.route('/sitemap.xml', methods=['GET'])
 def sitemap():
     try:
