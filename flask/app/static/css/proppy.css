@@ -19,6 +19,14 @@ fieldset legend {
   border-bottom:none;
 }
 
+/* Google Map */
+#map {
+  /* margin-top: 50px; */
+  height: 350px;
+  width: 400px;
+}
+
+
 
 /* Ajax dimming */
 #ajax-spinner {

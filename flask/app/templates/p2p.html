@@ -14,7 +14,15 @@
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Point-to-Point</small></h1>
 	</div>
-	   <div id="plot-div"><!-- Plotly chart will be drawn inside this DIV --></div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div id="map"></div>
+    </div>
+    <div class="col-sm-8">
+      <div id="plot-div"></div>
+    </div>
+  </div>
+
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
 
     <div class="row">
@@ -67,7 +75,7 @@
     <!-- tx params -->
     <div class="col-sm-6">
       <fieldset>
-        <legend>Tx. Site</legend>
+        <legend>Tx. Site <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon"></legend>
 
         <div class="row">
           <div class="form-group">
@@ -86,7 +94,7 @@
               {{p2p_form.tx_lat.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.tx_lat(class="form-control", id="tx-lat-field", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+              {{ p2p_form.tx_lat(class="form-control", id="tx-lat-field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
             </div>
             <div class="col-sm-1">
               <button id="geolocation-button" type="button" class="btn btn-primary">
@@ -102,7 +110,7 @@
               {{p2p_form.tx_lon.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.tx_lon(class="form-control", id="tx-lon-field", type="number", min="-180.0", max="180.0", step="any", required=true) }}
+              {{ p2p_form.tx_lon(class="form-control", id="tx-lng-field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -124,7 +132,7 @@
 
     <div class="col-sm-6">
       <fieldset>
-        <legend>Rx.Site</legend>
+        <legend>Rx.Site <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png" height="16" width="16" alt="Blue Balloon"></legend>
 
         <div class="row">
           <div class="form-group">
@@ -143,7 +151,7 @@
               {{p2p_form.rx_lat.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.rx_lat(class="form-control", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+              {{ p2p_form.rx_lat(class="form-control", id="rx-lat-field", onchange="rxPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -154,7 +162,7 @@
               {{p2p_form.rx_lon.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.rx_lon(class="form-control", type="number", min="-180.0", max="180.0", step="any", required=true) }}
+              {{ p2p_form.rx_lon(class="form-control", id="rx-lng-field", onchange="rxPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -194,14 +202,111 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+  "use strict";
+  var gcPath;
+  var txMarker;
+  var rxMarker;
+      function initMap() {
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+          center: {lat: 0, lng: 0},
+          zoom:0,
+          streetViewControl: false,
+          mapTypeControl: false,
+          scaleControl: true,
+          zoomControl: true,
+          zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL
+          },
+          mapTypeId: 'terrain'
+        });
+
+        txMarker = new google.maps.Marker({
+          map: map,
+          position: {lat: 0, lng: -30},
+          draggable: true,
+          icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png"
+        });
+
+        rxMarker = new google.maps.Marker({
+          map: map,
+          position: {lat: 0, lng: 30},
+          draggable: true,
+          icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
+        });
+
+        var geodesicOptions = {
+          strokeColor: '#ff0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 1,
+          geodesic: true,
+          map: map
+        };
+
+        gcPath = new google.maps.Polyline(geodesicOptions);
+        /*
+        google.maps.event.addDomListener(window, "resize", function() {
+          console.log("resizing the map");
+          var center = map.getCenter();
+          google.maps.event.trigger(map, "resize");
+          map.setCenter(center);c
+        });
+        */
+        google.maps.event.addListener(txMarker, 'drag', txMapMarkerPositionChanged);
+        google.maps.event.addListener(rxMarker, 'drag', rxMapMarkerPositionChanged);
+        $("#tx-lat-field").val(txMarker.getPosition().lat().toFixed(4));
+        $("#tx-lng-field").val(txMarker.getPosition().lng().toFixed(4));
+        $("#rx-lat-field").val(rxMarker.getPosition().lat().toFixed(4));
+        $("#rx-lng-field").val(rxMarker.getPosition().lng().toFixed(4));
+        updateGCPath();
+      }
+
+
+
   $('#geolocation-button').on('click', function (e) {
     navigator.geolocation.getCurrentPosition(showPosition);
   })
 
   function showPosition(position) {
-    document.getElementById("tx-lat-field").value = position.coords.latitude;
-    document.getElementById("tx-lon-field").value = position.coords.longitude;
+    $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
+    $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
+    txPositionChanged();
   }
+
+  function txMapMarkerPositionChanged(e) {
+    $("#tx-lat-field").val(e.latLng.lat().toFixed(4));
+    $("#tx-lng-field").val(e.latLng.lng().toFixed(4));
+    updateGCPath();
+  }
+
+  function rxMapMarkerPositionChanged(e) {
+    $("#rx-lat-field").val(e.latLng.lat().toFixed(4));
+    $("#rx-lng-field").val(e.latLng.lng().toFixed(4));
+    updateGCPath();
+  }
+
+  function txPositionChanged() {
+    txMarker.setPosition(new google.maps.LatLng($('#tx-lat-field').val(), $('#tx-lng-field').val()));
+    updateGCPath();
+  }
+
+  function rxPositionChanged() {
+    rxMarker.setPosition(new google.maps.LatLng($('#rx-lat-field').val(), $('#rx-lng-field').val()));
+    updateGCPath();
+  }
+
+  function updateGCPath() {
+    //console.log($('#tx-lat-field').val());
+    var txPosition = new google.maps.LatLng($('#tx-lat-field').val(), $('#tx-lng-field').val());
+    var rxPosition = new google.maps.LatLng($('#rx-lat-field').val(), $('#rx-lng-field').val());
+    gcPath.setPath([txPosition, rxPosition]);
+  }
+
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+
+  <script>
+
 
   $(function () {
     var dateNow = new Date();
@@ -305,6 +410,8 @@
         },
       };
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
+      /*Shift the map around to accomodate the plot */
+      $('#map').css('margin-top', '50px');
     },
   	error: function(result) {
   			// Handle errors here

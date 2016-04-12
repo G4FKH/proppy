@@ -235,6 +235,7 @@
   		processData: false,
   		contentType: false,
   		success: function(result) {
+        /*
         var layout = {
           xaxis: {
             title: 'Time (UTC)',
@@ -252,7 +253,42 @@
             pad: 4
           },
         };
-        Plotly.newPlot('plot-div', [result['p']], layout);
+        */
+
+        var data = {
+          type: 'scattergeo',
+          lat: [ 40.7127, 51.5072 ],
+          lon: [ -74.0059, 0.1275 ],
+          mode: 'lines',
+          line:{
+              width: 2,
+              color: 'blue'
+          }
+        };
+
+        var layout = {
+          //title: 'London to NYC Great Circle',
+          showlegend: false,
+          geo: {
+              resolution: 10,
+              showland: true,
+              landcolor: 'rgb(204, 204, 204)',
+              projection: {
+                type: 'equirectangular'
+              },
+              coastlinewidth: 1,
+              lataxis: {
+                range: [ -90, 90 ],
+                showgrid: false
+              },
+              lonaxis:{
+                range: [-180, 180],
+                showgrid: false
+              }
+            }
+        };
+        Plotly.newPlot('plot-div', [data], layout);
+        //Plotly.newPlot('plot-div', [result['p']], layout);
       },
   	  error: function(result) {
   			ajax_complete_msg = "Error";

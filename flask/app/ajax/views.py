@@ -15,9 +15,15 @@ from . import ajax
 
 @ajax.route('/predict', methods=['POST'])
 def predict():
-    #print(request.form)
+    #print(request.form)here
+    #TODO validate the input data
+    # Use flask.abort(code) to return values
+    # I should be able to use the WTForms
     sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
-    sys_year = int(request.form['year'])
+    try:
+        sys_year = int(request.form['year'])
+    except:
+        abort()
     sys_month = int(request.form['month'])
     sys_plot_type = request.form['sys_plot_type']
 
