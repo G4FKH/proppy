@@ -20,10 +20,10 @@ fieldset legend {
 }
 
 /* Google Map */
-#map {
-  /* margin-top: 50px; */
-  height: 350px;
-  width: 400px;
+#map-canvas {
+  /* aspect ratio 16:9 */
+  height: 225px;
+  width: 100%;
 }
 
 
