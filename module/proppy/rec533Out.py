@@ -87,10 +87,10 @@ class REC533Out:
         tx_ant_type_pattern = re.compile("^\s*Transmit antenna ([\w]+)\s*$")
         tx_ant_gain_pattern = re.compile("^\s*Transmit antenna gain offset = ([-\d.]+)")
 
-        ul_lat_pattern = re.compile("^\s*Upper left latitude   =\s*([\d.]+) ([NS])")
-        ul_lon_pattern = re.compile("^\s*Upper left longitude  =\s*([\d.]+) ([WE])")
-        lr_lat_pattern = re.compile("^\s*Lower right latitude  =\s*([\d.]+) ([NS])")
-        lr_lon_pattern = re.compile("^\s*Lower right longitude =\s*([\d.]+) ([WE])")
+        ul_lat_pattern = re.compile("^\s*Upper left latitude   =\s*([\d.]+) ([NS=])")
+        ul_lon_pattern = re.compile("^\s*Upper left longitude  =\s*([\d.]+) ([WE=])")
+        lr_lat_pattern = re.compile("^\s*Lower right latitude  =\s*([\d.]+) ([NS=])")
+        lr_lon_pattern = re.compile("^\s*Lower right longitude =\s*([\d.]+) ([WE=])")
 
         lat_inc_pattern = re.compile("^\s*Latitude increment\s*= ([\d.]+) \(deg\)")
         lon_inc_pattern = re.compile("^\s*Longitude increment\s*= ([\d.]+) \(deg\)")
