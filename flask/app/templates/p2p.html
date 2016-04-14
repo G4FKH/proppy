@@ -184,7 +184,7 @@
   <div class="row">
     <div class="form-group">
        <div class="col-sm-1">
-         <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
+         <input name="submit" disabled="disabled" id="submit-button" class="btn btn-default" type="submit" value="Submit"/>
        </div>
     </div>
   </div>
@@ -429,5 +429,11 @@
     Plotly.relayout('plot-div', update)
   };
 
+</script>
+
+<script>
+$(document).ready(function(){
+    $("#submit-button").prop("disabled", false);
+});
 </script>
 {% endblock %}
