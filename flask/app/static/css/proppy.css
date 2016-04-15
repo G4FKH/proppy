@@ -24,6 +24,13 @@ fieldset legend {
   /* aspect ratio 16:9 */
   height: 400px;
   width: 100%;
+  border-radius: 5px;
+}
+
+#plot-div button {
+  position:absolute;
+  bottom:0px;
+  right:30px;
 }
 
 /* Ajax dimming */

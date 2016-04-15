@@ -19,7 +19,11 @@
       <div id="map-canvas"></div>
     </div>
     <div class="col-sm-6">
-      <div id="plot-div"></div>
+      <div id="plot-div">
+        <button id="refresh-button" type="button" class="btn btn-warning" style="display:none">
+          <span class="glyphicon glyphicon glyphicon-refresh"></span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -210,76 +214,68 @@
   var gcPath;
   var txMarker;
   var rxMarker;
-      function initMap() {
-        var mapDiv = document.getElementById('map-canvas');
-        var map = new google.maps.Map(mapDiv, {
-          center: {lat: 0, lng: 0},
-          zoom:1,
-          streetViewControl: false,
-          mapTypeControl: false,
-          scaleControl: true,
-          zoomControl: true,
-          zoomControlOptions: {
-            style: google.maps.ZoomControlStyle.SMALL
-          },
-          mapTypeId: 'terrain'
-        });
+  var plotIsVisible = false;
 
-        txMarker = new google.maps.Marker({
-          map: map,
-          position: {lat: 0, lng: -30},
-          draggable: true,
-          icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png"
-        });
+  function initMap() {
+    var mapDiv = document.getElementById('map-canvas');
+    var map = new google.maps.Map(mapDiv, {
+      center: {lat: 0, lng: 0},
+      zoom:1,
+      streetViewControl: false,
+      mapTypeControl: false,
+      scaleControl: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.SMALL
+      },
+      mapTypeId: 'terrain'
+    });
 
-        rxMarker = new google.maps.Marker({
-          map: map,
-          position: {lat: 0, lng: 30},
-          draggable: true,
-          icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
-        });
+    txMarker = new google.maps.Marker({
+      map: map,
+      position: {lat: 0, lng: -30},
+      draggable: true,
+      icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png"
+    });
 
-        var geodesicOptions = {
-          strokeColor: '#ff0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 1,
-          geodesic: true,
-          map: map
-        };
+    rxMarker = new google.maps.Marker({
+      map: map,
+      position: {lat: 0, lng: 30},
+      draggable: true,
+      icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
+    });
 
-        gcPath = new google.maps.Polyline(geodesicOptions);
-        /*
-        google.maps.event.addDomListener(window, "resize", function() {
-          console.log("resizing the map");
-          var center = map.getCenter();
-          google.maps.event.trigger(map, "resize");
-          map.setCenter(center);c
-        });
-        */
-        google.maps.event.addListener(txMarker, 'drag', txMapMarkerPositionChanged);
-        google.maps.event.addListener(rxMarker, 'drag', rxMapMarkerPositionChanged);
-        $("#tx-lat-field").val(txMarker.getPosition().lat().toFixed(4));
-        $("#tx-lng-field").val(txMarker.getPosition().lng().toFixed(4));
-        $("#rx-lat-field").val(rxMarker.getPosition().lat().toFixed(4));
-        $("#rx-lng-field").val(rxMarker.getPosition().lng().toFixed(4));
-        updateGCPath();
-      }
+    var geodesicOptions = {
+      strokeColor: '#ff0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 1,
+      geodesic: true,
+      map: map
+    };
 
-
-
-  $('#tx-geolocation-button').on('click', function (e) {
-    navigator.geolocation.getCurrentPosition(showTxPosition);
-  })
+    gcPath = new google.maps.Polyline(geodesicOptions);
+    /*
+    google.maps.event.addDomListener(window, "resize", function() {
+      console.log("resizing the map");
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize");
+      map.setCenter(center);c
+    });
+    */
+    google.maps.event.addListener(txMarker, 'drag', txMapMarkerPositionChanged);
+    google.maps.event.addListener(rxMarker, 'drag', rxMapMarkerPositionChanged);
+    $("#tx-lat-field").val(txMarker.getPosition().lat().toFixed(4));
+    $("#tx-lng-field").val(txMarker.getPosition().lng().toFixed(4));
+    $("#rx-lat-field").val(rxMarker.getPosition().lat().toFixed(4));
+    $("#rx-lng-field").val(rxMarker.getPosition().lng().toFixed(4));
+    updateGCPath();
+  }
 
   function showTxPosition(position) {
     $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
     $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
     txPositionChanged();
   }
-
-  $('#rx-geolocation-button').on('click', function (e) {
-    navigator.geolocation.getCurrentPosition(showRxPosition);
-  })
 
   function showRxPosition(position) {
     $("#rx-lat-field").val(position.coords.latitude.toFixed(4));
@@ -288,12 +284,14 @@
   }
 
   function txMapMarkerPositionChanged(e) {
+    inputHasChanged();
     $("#tx-lat-field").val(e.latLng.lat().toFixed(4));
     $("#tx-lng-field").val(e.latLng.lng().toFixed(4));
     updateGCPath();
   }
 
   function rxMapMarkerPositionChanged(e) {
+    inputHasChanged();
     $("#rx-lat-field").val(e.latLng.lat().toFixed(4));
     $("#rx-lng-field").val(e.latLng.lng().toFixed(4));
     updateGCPath();
@@ -316,12 +314,16 @@
     gcPath.setPath([txPosition, rxPosition]);
   }
 
+  function inputHasChanged() {
+    if (plotIsVisible) {
+      $("#refresh-button").show();
+    }
+  }
+
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
   <script>
-
-
   $(function () {
     var dateNow = new Date();
     $('#datetimepicker').datetimepicker({
@@ -425,6 +427,8 @@
       };
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
       /*Shift the map around to accomodate the plot */
+      plotIsVisible = true;
+      $("#refresh-button").hide();
       $('#map-canvas').css('margin-top', '50px');
     },
   	error: function(result) {
@@ -447,6 +451,22 @@
 
 <script>
 $(document).ready(function(){
+    $('#refresh-button').on('click', function (e) {
+      do_prediction($('#parameters_form')[0]);
+    });
+
+    $('#parameters_form').change(function() {
+      inputHasChanged();
+    });
+
+    $('#tx-geolocation-button').on('click', function (e) {
+      navigator.geolocation.getCurrentPosition(showTxPosition);
+    });
+
+    $('#rx-geolocation-button').on('click', function (e) {
+      navigator.geolocation.getCurrentPosition(showRxPosition);
+    })
+
     $("#submit-button").prop("disabled", false);
 });
 </script>
