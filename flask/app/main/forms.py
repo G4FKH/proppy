@@ -19,7 +19,7 @@ class P2PForm(Form):
     rx_name = StringField("Name")
     rx_lat = DecimalField("Latitude")
     rx_lon = DecimalField("Longitude")
-    rx_gain = DecimalField("Ant. Gain")
+    rx_gain = DecimalField("Ant Gain")
 
 
 class AreaForm(Form):
