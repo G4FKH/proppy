@@ -15,10 +15,10 @@
 		<h1>Proppy <small>HF Circuit Prediction: Point-to-Point</small></h1>
 	</div>
   <div class="row">
-    <div class="col-sm-4 center-block">
+    <div class="col-sm-6">
       <div id="map-canvas"></div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
       <div id="plot-div"></div>
     </div>
   </div>
@@ -214,7 +214,7 @@
         var mapDiv = document.getElementById('map-canvas');
         var map = new google.maps.Map(mapDiv, {
           center: {lat: 0, lng: 0},
-          zoom:0,
+          zoom:1,
           streetViewControl: false,
           mapTypeControl: false,
           scaleControl: true,
