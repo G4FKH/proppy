@@ -1,5 +1,9 @@
 /* General CSS */
 
+html {
+    overflow-y:scroll;
+}
+
 #footer {
   text-align: center;
 }
