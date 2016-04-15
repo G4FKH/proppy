@@ -479,7 +479,11 @@ $(document).ready(function(){
       do_prediction($('#parameters_form')[0]);
     });
 
-    $('#parameters_form').change(function() {
+    $('#parameters_form').on('change', function(e) {
+      inputHasChanged();
+    });
+
+    $("#datetimepicker").on("dp.change", function (e) {
       inputHasChanged();
     });
 
