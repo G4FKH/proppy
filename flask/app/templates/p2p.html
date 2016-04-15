@@ -75,7 +75,12 @@
     <!-- tx params -->
     <div class="col-sm-6">
       <fieldset>
-        <legend>Tx. Site <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon"></legend>
+        <legend>Tx. Site
+          <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
+            <button id="geolocation-button" type="button" class="btn btn-primary">
+              <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
+            </button>
+        </legend>
 
         <div class="row">
           <div class="form-group">
@@ -95,11 +100,6 @@
             </div>
             <div class="col-sm-5">
               {{ p2p_form.tx_lat(class="form-control", id="tx-lat-field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
-            </div>
-            <div class="col-sm-1">
-              <button id="geolocation-button" type="button" class="btn btn-primary">
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
-              </button>
             </div>
           </div>
         </div>
