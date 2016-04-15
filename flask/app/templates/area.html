@@ -17,7 +17,7 @@
 	<div id="plot-div">
   </div>
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
-
+    {{ form.csrf_token }}
     <div class="row">
       <div class="col-sm-6">
         <fieldset>
@@ -90,7 +90,12 @@
       <!-- tx params -->
       <div class="col-sm-6">
         <fieldset>
-          <legend>Tx. Site</legend>
+          <legend>Tx. Site
+            <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
+            <button id="geolocation-button" type="button" class="btn btn-primary btn-xs">
+              <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
+            </button>
+          </legend>
 
           <div class="row">
             <div class="form-group">
@@ -110,11 +115,6 @@
               </div>
               <div class="col-sm-5">
                 {{ form.tx_lat(class="form-control", id="lat-field", type="number", min="-90.0", max="90.0", step="any", required=true) }}
-              </div>
-              <div class="col-sm-1">
-                <button id="geolocation-button" type="button" class="btn btn-primary">
-                  <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
-                </button>
               </div>
             </div>
           </div>

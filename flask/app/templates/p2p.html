@@ -24,7 +24,7 @@
   </div>
 
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
-
+    {{ p2p_form.csrf_token }}
     <div class="row">
         <div class="col-sm-12">
           <fieldset>
@@ -77,9 +77,9 @@
       <fieldset>
         <legend>Tx. Site
           <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
-            <button id="geolocation-button" type="button" class="btn btn-primary btn-xs">
-              <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
-            </button>
+          <button id="geolocation-button" type="button" class="btn btn-primary btn-xs">
+            <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
+          </button>
         </legend>
 
         <div class="row">
