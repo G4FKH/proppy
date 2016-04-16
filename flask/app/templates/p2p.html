@@ -402,11 +402,13 @@
         result['p']['colorbar']['tickmode'] = 'array';
         result['p']['colorbar']['titleside'] = 'right';
         result['p']['colorbar']['titlefont'] = titlefont;
+        result['p']['colorbar']['thickness'] = 12;
+        result['p']['colorbar']['xpad'] = 3;
       } else {
         result['p']['colorbar'] = {
           tickmode:'array',
-          thickness:10,
-          xpad:4
+          thickness:6,
+          xpad:3
         };
       }
       //console.log(result['p']['colorbar']);
