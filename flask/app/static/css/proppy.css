@@ -31,10 +31,9 @@ fieldset legend {
   border-radius: 5px;
 }
 
-#plot-div button {
-  position:absolute;
-  bottom:0px;
-  right:30px;
+/* Layout utilities */
+.m-t-15 {
+  margin-top: 15px !important;
 }
 
 /* Ajax dimming */

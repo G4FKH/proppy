@@ -43,11 +43,16 @@
       <div id="map-canvas"></div>
     </div>
     <div class="col-sm-6">
-      <div id="plot-div">
-        <button id="refresh-button" type="button" class="btn btn-warning" style="display:none">
-          <span class="glyphicon glyphicon glyphicon-refresh"></span>
-        </button>
-      </div>
+      <div id="plot-div"></div>
+    </div>
+  </div>
+
+  <div class="row m-t-15">
+    <div class="col-sm-offset-5 col-sm-2 text-center">
+      <button id="do-prediction-button" type="button" class="btn btn-default" disabled>
+        Run Prediction
+        <span class="glyphicon glyphicon glyphicon-refresh"></span>
+      </button>
     </div>
   </div>
 
@@ -213,14 +218,6 @@
     </div> <!-- end of rx params -->
   </div> <!-- end of input params row -->
 
-  <div class="row">
-    <div class="form-group">
-       <div class="col-sm-1">
-         <input name="submit" disabled="disabled" id="submit-button" class="btn btn-default" type="submit" value="Submit"/>
-       </div>
-    </div>
-  </div>
-
 	</form>
 </div>
 {% endblock %}
@@ -339,9 +336,7 @@
   }
 
   function inputHasChanged() {
-    if (plotIsVisible) {
-      $("#refresh-button").show();
-    }
+    $('#do-prediction-button').prop('disabled', false);
   }
 
   </script>
@@ -365,11 +360,6 @@
   })
   .ajaxStop(function(){
       $("#ajax-spinner").hide();
-  });
-
-  $( '#parameters_form' ).submit( function( e ) {
-    do_prediction(e.target);
-    e.preventDefault();
   });
 
   function do_prediction(form) {
@@ -452,8 +442,8 @@
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
       /*Shift the map around to accomodate the plot */
       plotIsVisible = true;
-      $("#refresh-button").hide();
       $('#map-canvas').css('margin-top', '50px');
+      $('#do-prediction-button').prop('disabled', true);
     },
   	error: function(result) {
   			// Handle errors here
@@ -475,10 +465,6 @@
 
 <script>
 $(document).ready(function(){
-    $('#refresh-button').on('click', function (e) {
-      do_prediction($('#parameters_form')[0]);
-    });
-
     $('#parameters_form').on('change', function(e) {
       inputHasChanged();
     });
@@ -493,9 +479,13 @@ $(document).ready(function(){
 
     $('#rx-geolocation-button').on('click', function (e) {
       navigator.geolocation.getCurrentPosition(showRxPosition);
-    })
+    });
 
-    $("#submit-button").prop("disabled", false);
+    $('#do-prediction-button').on('click', function (e) {
+      do_prediction($('#parameters_form')[0]);
+    });
+
+    $('#do-prediction-button').prop('disabled', false);
 });
 </script>
 {% endblock %}
