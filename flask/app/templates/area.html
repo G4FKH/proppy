@@ -37,8 +37,25 @@
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Area</small></h1>
 	</div>
-	<div id="plot-div">
+  <div id="flash-container"></div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div id="map-canvas"></div>
+    </div>
+    <div class="col-sm-6">
+      <div id="plot-div"></div>
+    </div>
   </div>
+
+  <div class="row m-t-15">
+    <div class="col-sm-offset-5 col-sm-2 text-center">
+      <button id="do-prediction-button" type="button" class="btn btn-primary" disabled>
+        Run Prediction
+        <span class="glyphicon glyphicon glyphicon-refresh"></span>
+      </button>
+    </div>
+  </div>
+
 	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
     {{ form.csrf_token }}
     <div class="row">
@@ -115,7 +132,7 @@
         <fieldset>
           <legend>Tx. Site
             <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
-            <button id="geolocation-button" type="button" class="btn btn-primary btn-xs">
+            <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
               <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
             </button>
           </legend>
@@ -137,7 +154,7 @@
                 {{ form.tx_lat.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
-                {{ form.tx_lat(class="form-control", id="lat-field", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+                {{ form.tx_lat(class="form-control", id="tx-lat-field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
               </div>
             </div>
           </div>
@@ -148,7 +165,7 @@
                 {{ form.tx_lon.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
-                {{ form.tx_lon(class="form-control", id="lon-field", type="number", min="-180.0", max="180.0", step="any", required=true) }}
+                {{ form.tx_lon(class="form-control", id="tx-lng-field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
               </div>
             </div>
           </div>
@@ -168,14 +185,6 @@
       </div> <!-- end of tx params -->
     </div> <!-- end of input params row -->
 
-    <div class="row">
-      <div class="form-group">
-         <div class="col-sm-1">
-           <input id="submit" name="submit" class="btn btn-default" type="submit" value="Submit"/>
-         </div>
-      </div>
-    </div>
-
 	</form>
 </div>
 {% endblock %}
@@ -187,15 +196,82 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
-  $('#geolocation-button').on('click', function (e) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  })
+  "use strict";
+  var gcPath;
+  var txMarker;
 
-  function showPosition(position) {
-    document.getElementById("lat-field").value = position.coords.latitude;
-    document.getElementById("lon-field").value = position.coords.longitude;
+  function initMap() {
+    var mapDiv = document.getElementById('map-canvas');
+    var map = new google.maps.Map(mapDiv, {
+      center: {lat: 0, lng: 0},
+      zoom:1,
+      streetViewControl: false,
+      mapTypeControl: false,
+      scaleControl: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.SMALL
+      },
+      mapTypeId: 'terrain'
+    });
+
+    txMarker = new google.maps.Marker({
+      map: map,
+      position: {lat: 0, lng: -30},
+      draggable: true,
+      icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png"
+    });
+
+    var geodesicOptions = {
+      strokeColor: '#ff0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 1,
+      geodesic: true,
+      map: map
+    };
+
+    gcPath = new google.maps.Polyline(geodesicOptions);
+    /*
+    google.maps.event.addDomListener(window, "resize", function() {
+      console.log("resizing the map");
+      var center = map.getCenter();
+      google.maps.event.trigger(map, "resize");
+      map.setCenter(center);c
+    });
+    */
+    google.maps.event.addListener(txMarker, 'drag', txMapMarkerPositionChanged);
+    $("#tx-lat-field").val(txMarker.getPosition().lat().toFixed(4));
+    $("#tx-lng-field").val(txMarker.getPosition().lng().toFixed(4));
   }
 
+  function showTxPosition(position) {
+    $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
+    $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
+    txPositionChanged();
+  }
+
+  function txMapMarkerPositionChanged(e) {
+    inputHasChanged();
+    $("#tx-lat-field").val(e.latLng.lat().toFixed(4));
+    $("#tx-lng-field").val(e.latLng.lng().toFixed(4));
+  }
+
+  function txPositionChanged() {
+    txMarker.setPosition(new google.maps.LatLng($('#tx-lat-field').val(), $('#tx-lng-field').val()));
+  }
+
+  function inputHasChanged() {
+    $('#do-prediction-button').prop('disabled', false);
+  }
+
+  </script>
+
+
+  <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+
+
+
+<script>
   $(function () {
     //var dateNow = new Date.();
     var date = new Date();
@@ -215,7 +291,6 @@
   .ajaxStop(function(){
       $("#ajax-spinner").hide();
   });
-
 
   $( '#parameters_form' ).submit( function( e ) {
     do_prediction(e.target);
@@ -257,13 +332,41 @@
   		processData: false,
   		contentType: false,
   		success: function(img_url) {
+        $('#flash-container').empty();
         $('#plot-div').html('<img src="'+img_url+'" class="img-responsive">');
+        $('#do-prediction-button').prop('disabled', true);
       },
-  	  error: function(result) {
-  			ajax_complete_msg = "Error";
-  			console.log('ERRORS: ' + result);
-  		},
+      error: function(result) {
+    			// Handle errors here
+    			//console.log('ERRORS: ' + JSON.stringify(result));
+          var message = "An undefined error has occured.";
+          if (result['responseJSON']['message'] != undefined) {
+            message = result['responseJSON']['message'];
+          }
+          $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
+    	}
   	});
   }
+</script>
+<script>
+$(document).ready(function(){
+    $('#parameters_form').on('change', function(e) {
+      inputHasChanged();
+    });
+
+    $("#datetimepicker").on("dp.change", function (e) {
+      inputHasChanged();
+    });
+
+    $('#tx-geolocation-button').on('click', function (e) {
+      navigator.geolocation.getCurrentPosition(showTxPosition);
+    });
+
+    $('#do-prediction-button').on('click', function (e) {
+      do_prediction($('#parameters_form')[0]);
+    });
+
+    $('#do-prediction-button').prop('disabled', false);
+});
 </script>
 {% endblock %}
