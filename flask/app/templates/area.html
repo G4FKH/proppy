@@ -209,7 +209,6 @@
 
 <script>
   "use strict";
-  var gcPath;
   var txMarker;
 
   function initMap() {
@@ -242,7 +241,6 @@
       map: map
     };
 
-    gcPath = new google.maps.Polyline(geodesicOptions);
     /*
     google.maps.event.addDomListener(window, "resize", function() {
       console.log("resizing the map");
