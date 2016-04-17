@@ -38,6 +38,7 @@
 	<div class="page-header">
 		<h1>Proppy <small>HF Circuit Prediction: Point-to-Point</small></h1>
 	</div>
+  <div id="flash-container"></div>
   <div class="row">
     <div class="col-sm-6">
       <div id="map-canvas"></div>
@@ -235,7 +236,6 @@
   var gcPath;
   var txMarker;
   var rxMarker;
-  var plotIsVisible = false;
 
   function initMap() {
     var mapDiv = document.getElementById('map-canvas');
@@ -443,15 +443,18 @@
       };
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
       /*Shift the map around to accomodate the plot */
-      plotIsVisible = true;
+      $('#flash-container').empty();
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },
   	error: function(result) {
   			// Handle errors here
-  			//
-  			ajax_complete_msg = "Error";
-  			console.log('ERRORS: ' + result);
+  			//console.log('ERRORS: ' + JSON.stringify(result));
+        var message = "An undefined error has occured.";
+        if (result['responseJSON']['message'] != undefined) {
+          message = result['responseJSON']['message'];
+        }
+        $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
   		}
   	});
   }

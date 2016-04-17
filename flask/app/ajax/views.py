@@ -11,6 +11,7 @@ from proppy.rec533Out import REC533Out
 from proppy.propAreaPlot import PropAreaPlot
 
 from ..main.forms import P2PForm, AreaForm
+from .validation_error import ValidationError
 
 from . import ajax
 
@@ -19,14 +20,11 @@ def predict():
     #print(request.form)
     form = P2PForm(request.form)
     if request.method == 'POST' and form.validate():
-        #TODO validate the input data
-        # Use flask.abort(code) to return values
-        # I should be able to use the WTForms
         sys_pwr = 10 * log10(float(request.form['sys_pwr'])/1000.0)
         try:
             sys_year = int(request.form['year'])
         except:
-            abort(500)
+            raise ValidationError("Invalid value for year.")
         sys_month = int(request.form['month'])
         sys_plot_type = request.form['sys_plot_type']
 
@@ -40,7 +38,10 @@ def predict():
         rx_lon = float(request.form['rx_lon'])
         rx_gain = float(request.form['rx_gain'])
 
-        ssn = current_app.config['SSN_DATA'][str(sys_year)]['{:d}'.format(sys_month)]
+        try:
+            ssn = current_app.config['SSN_DATA'][str(sys_year)]['{:d}'.format(sys_month)]
+        except:
+            raise ValidationError("Error retreiving SSN data for year/month.")
 
         if request.form['sys_traffic'] == 'cw':
             traffic = {'bw':1000, 'snr':0}
@@ -149,7 +150,11 @@ def predict():
         for err in errorMessages:
             print(err)
     """
-    abort(500)
+    error_msg = ""
+    for fieldName, errorMessages in form.errors.items():
+        for err in errorMessages:
+            error_msg += "["+fieldName+"] "+err
+    raise ValidationError("Validation Error: "+error_msg)
 
 
 @ajax.route('/areapredict', methods=['POST'])
@@ -243,7 +248,11 @@ def areapredict():
         for err in errorMessages:
             print(err)
     """
-    abort(500)
+    error_msg = ""
+    for fieldName, errorMessages in form.errors.items():
+        for err in errorMessages:
+            error_msg += "["+fieldName+"] "+err
+    raise ValidationError("Validation Error: "+error_msg)
 
 
 @ajax.route('/areapredicttest', methods=['POST'])
@@ -335,3 +344,10 @@ def areapredicttest():
     response = {'p':p}
     os.remove(input_file.name)
     return jsonify(**response)
+
+
+@ajax.errorhandler(ValidationError)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
