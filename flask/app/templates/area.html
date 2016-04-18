@@ -48,15 +48,15 @@
   </div>
 
   <div class="modal fade" id="plot-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-body">
-      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <img src="" id="modal-plot" style="width: 100%;" >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+      	   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+           <img src="" id="modal-plot" style="width: 100%;" >
+         </div>
       </div>
     </div>
   </div>
-</div>
 
 
   <div class="row m-t-15">
@@ -341,10 +341,13 @@
   		url: form_url,
   		type: 'POST',
   		data: form_data,
+      dataType: "json",
   		mimeType: "multipart/form-data",
   		processData: false,
   		contentType: false,
-  		success: function(img_url) {
+  		success: function(result) {
+        //console.log(JSON.stringify(result));
+        var img_url = result['img_url'];
         $('#flash-container').empty();
         $('#modal-plot').attr('src', img_url);
         $('#plot-div').html('<img src="'+img_url+'" class="img-responsive"><a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');

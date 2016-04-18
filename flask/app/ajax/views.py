@@ -47,7 +47,6 @@ def predict():
             traffic = {'bw':1000, 'snr':0}
         else:
             traffic = {'bw':3000, 'snr':13}
-
         input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
         input_file.write('PathName "Proppy Plot"\n')
         input_file.write('PathTXName "{:s}"\n'.format(tx_name))
@@ -232,23 +231,26 @@ def areapredict():
             output_file.name],
             stdout=FNULL,
             stderr=subprocess.STDOUT)
-        #print(output_file.name)
         pap = PropAreaPlot(output_file.name)
         png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix=".png", dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
         png_file_base = os.path.splitext(png_file.name)[0]
         #print(png_file_base)
 
         pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, out_file=os.path.splitext(png_file.name)[0])
-        os.remove(input_file.name)
-        os.remove(output_file.name)
-        return (url_for('static', filename='img/area/'+os.path.basename(png_file.name)))
+        #print(input_file.name)
+        #os.remove(input_file.name)
+        #print(output_file.name)
+        #os.remove(output_file.name)
+        img_url = url_for('static', filename='img/area/'+os.path.basename(png_file.name))
+        response = {'img_url':img_url}
+        return jsonify(**response)
     """
     print('Failed to validate area form;')
     for fieldName, errorMessages in form.errors.items():
         for err in errorMessages:
             print(err)
     """
-    error_msg = ""
+    errorerror_msg = ""
     for fieldName, errorMessages in form.errors.items():
         for err in errorMessages:
             error_msg += "["+fieldName+"] "+err
