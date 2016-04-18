@@ -52,7 +52,7 @@
     <div class="modal-content">
       <div class="modal-body">
       	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <img src="" class="plot-preview" style="width: 100%;" >
+        <img src="" id="modal-plot" style="width: 100%;" >
       </div>
     </div>
   </div>
@@ -284,7 +284,6 @@
   <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
 
-
 <script>
   $(function () {
     //var dateNow = new Date.();
@@ -347,7 +346,8 @@
   		contentType: false,
   		success: function(img_url) {
         $('#flash-container').empty();
-        $('#plot-div').html('<a href="#" class="pop"><img src="'+img_url+'" class="img-responsive"></a>');
+        $('#modal-plot').attr('src', img_url);
+        $('#plot-div').html('<img src="'+img_url+'" class="img-responsive"><a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
         $('#do-prediction-button').prop('disabled', true);
       },
       error: function(result) {
@@ -383,8 +383,6 @@ $(document).ready(function(){
     $('#do-prediction-button').prop('disabled', false);
 
     $(document).on("click", ".pop",function() {
-      console.log('pop');
-			$('.plot-preview').attr('src', $(this).find('img').attr('src'));
 			$('#plot-modal').modal('show');
 		});
 

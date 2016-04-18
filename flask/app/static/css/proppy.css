@@ -36,6 +36,11 @@ fieldset legend {
   margin-top: 15px !important;
 }
 
+
+button.plot-zoom {
+  margin-left: 6px;
+}
+
 /* Ajax dimming */
 #ajax-spinner {
     background-color: #333;
