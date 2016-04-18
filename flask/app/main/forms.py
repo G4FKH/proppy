@@ -14,13 +14,13 @@ class P2PForm(Form):
     year = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=1900, max=2050)])
 
     tx_name = StringField("Name")
-    tx_lat = DecimalField("Latitude", [InputRequired(), NumberRange(-90, 90)])
-    tx_lon = DecimalField("Longitude", [InputRequired(), NumberRange(-180, 180)])
+    tx_lat_field = DecimalField("Latitude", [InputRequired(), NumberRange(-90, 90)])
+    tx_lng_field = DecimalField("Longitude", [InputRequired(), NumberRange(-180, 180)])
     tx_gain = DecimalField("Ant Gain", [InputRequired()])
 
     rx_name = StringField("Name")
-    rx_lat = DecimalField("Latitude", [InputRequired(), NumberRange(-90, 90)])
-    rx_lon = DecimalField("Longitude", [InputRequired(), NumberRange(-180, 180)])
+    rx_lat_field = DecimalField("Latitude", [InputRequired(), NumberRange(-90, 90)])
+    rx_lng_field = DecimalField("Longitude", [InputRequired(), NumberRange(-180, 180)])
     rx_gain = DecimalField("Ant Gain", [Required()])
 
 

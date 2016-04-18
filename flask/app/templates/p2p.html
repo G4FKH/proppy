@@ -57,7 +57,7 @@
     </div>
   </div>
 
-	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
+	<form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
     {{ p2p_form.csrf_token }}
     <div class="row">
         <div class="col-sm-12">
@@ -130,10 +130,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{p2p_form.tx_lat.label(class="control-label")}}
+              {{p2p_form.tx_lat_field.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.tx_lat(class="form-control", id="tx-lat-field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+              {{ p2p_form.tx_lat_field(class="form-control", id="tx_lat_field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -141,10 +141,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{p2p_form.tx_lon.label(class="control-label")}}
+              {{p2p_form.tx_lng_field.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.tx_lon(class="form-control", id="tx-lng-field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
+              {{ p2p_form.tx_lng_field(class="form-control", id="tx_lng_field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -186,10 +186,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{p2p_form.rx_lat.label(class="control-label")}}
+              {{p2p_form.rx_lat_field.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.rx_lat(class="form-control", id="rx-lat-field", onchange="rxPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+              {{ p2p_form.rx_lat_field(class="form-control", id="rx_lat_field", onchange="rxPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -197,10 +197,10 @@
         <div class="row">
           <div class="form-group">
             <div class="col-sm-3">
-              {{p2p_form.rx_lon.label(class="control-label")}}
+              {{p2p_form.rx_lng_field.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
-              {{ p2p_form.rx_lon(class="form-control", id="rx-lng-field", onchange="rxPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
+              {{ p2p_form.rx_lng_field(class="form-control", id="rx_lng_field", onchange="rxPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
             </div>
           </div>
         </div>
@@ -285,28 +285,28 @@
     */
     google.maps.event.addListener(txMarker, 'drag', txMapMarkerPositionChanged);
     google.maps.event.addListener(rxMarker, 'drag', rxMapMarkerPositionChanged);
-    $("#tx-lat-field").val(txMarker.getPosition().lat().toFixed(4));
-    $("#tx-lng-field").val(txMarker.getPosition().lng().toFixed(4));
-    $("#rx-lat-field").val(rxMarker.getPosition().lat().toFixed(4));
-    $("#rx-lng-field").val(rxMarker.getPosition().lng().toFixed(4));
+    $("#tx_lat_field").val(txMarker.getPosition().lat().toFixed(4));
+    $("#tx_lng_field").val(txMarker.getPosition().lng().toFixed(4));
+    $("#rx_lat_field").val(rxMarker.getPosition().lat().toFixed(4));
+    $("#rx_lng_field").val(rxMarker.getPosition().lng().toFixed(4));
     updateGCPath();
   }
 
   function showTxPosition(position) {
-    if ( ($("#tx-lat-field").val() != position.coords.latitude.toFixed(4)) ||
-        ($("#tx-lng-field").val() != position.coords.longitude.toFixed(4))) {
-      $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
-      $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
+    if ( ($("#tx_lat_field").val() != position.coords.latitude.toFixed(4)) ||
+        ($("#tx_lng_field").val() != position.coords.longitude.toFixed(4))) {
+      $("#tx_lat_field").val(position.coords.latitude.toFixed(4));
+      $("#tx_lng_field").val(position.coords.longitude.toFixed(4));
       txPositionChanged();
       inputHasChanged();
     }
   }
 
   function showRxPosition(position) {
-    if ( ($("#rx-lat-field").val() != position.coords.latitude.toFixed(4)) ||
-        ($("#rx-lng-field").val() != position.coords.longitude.toFixed(4))) {
-      $("#rx-lat-field").val(position.coords.latitude.toFixed(4));
-      $("#rx-lng-field").val(position.coords.longitude.toFixed(4));
+    if ( ($("#rx_lat_field").val() != position.coords.latitude.toFixed(4)) ||
+        ($("#rx_lng_field").val() != position.coords.longitude.toFixed(4))) {
+      $("#rx_lat_field").val(position.coords.latitude.toFixed(4));
+      $("#rx_lng_field").val(position.coords.longitude.toFixed(4));
       rxPositionChanged();
       inputHasChanged();
     }
@@ -314,32 +314,32 @@
 
   function txMapMarkerPositionChanged(e) {
     inputHasChanged();
-    $("#tx-lat-field").val(e.latLng.lat().toFixed(4));
-    $("#tx-lng-field").val(e.latLng.lng().toFixed(4));
+    $("#tx_lat_field").val(e.latLng.lat().toFixed(4));
+    $("#tx_lng_field").val(e.latLng.lng().toFixed(4));
     updateGCPath();
   }
 
   function rxMapMarkerPositionChanged(e) {
     inputHasChanged();
-    $("#rx-lat-field").val(e.latLng.lat().toFixed(4));
-    $("#rx-lng-field").val(e.latLng.lng().toFixed(4));
+    $("#rx_lat_field").val(e.latLng.lat().toFixed(4));
+    $("#rx_lng_field").val(e.latLng.lng().toFixed(4));
     updateGCPath();
   }
 
   function txPositionChanged() {
-    txMarker.setPosition(new google.maps.LatLng($('#tx-lat-field').val(), $('#tx-lng-field').val()));
+    txMarker.setPosition(new google.maps.LatLng($('#tx_lat_field').val(), $('#tx_lng_field').val()));
     updateGCPath();
   }
 
   function rxPositionChanged() {
-    rxMarker.setPosition(new google.maps.LatLng($('#rx-lat-field').val(), $('#rx-lng-field').val()));
+    rxMarker.setPosition(new google.maps.LatLng($('#rx_lat_field').val(), $('#rx_lng_field').val()));
     updateGCPath();
   }
 
   function updateGCPath() {
-    //console.log($('#tx-lat-field').val());
-    var txPosition = new google.maps.LatLng($('#tx-lat-field').val(), $('#tx-lng-field').val());
-    var rxPosition = new google.maps.LatLng($('#rx-lat-field').val(), $('#rx-lng-field').val());
+    //console.log($('#tx_lat_field').val());
+    var txPosition = new google.maps.LatLng($('#tx_lat_field').val(), $('#tx_lng_field').val());
+    var rxPosition = new google.maps.LatLng($('#rx_lat_field').val(), $('#rx_lng_field').val());
     gcPath.setPath([txPosition, rxPosition]);
   }
 

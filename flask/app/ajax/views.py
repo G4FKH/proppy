@@ -30,13 +30,13 @@ def predict():
         sys_plot_type = request.form['sys_plot_type']
 
         tx_name = request.form['tx_name'].strip()
-        tx_lat = float(request.form['tx_lat'])
-        tx_lon = float(request.form['tx_lon'])
+        tx_lat = float(request.form['tx_lat_field'])
+        tx_lon = float(request.form['tx_lng_field'])
         tx_gain = float(request.form['tx_gain'])
 
         rx_name = request.form['rx_name'].strip()
-        rx_lat = float(request.form['rx_lat'])
-        rx_lon = float(request.form['rx_lon'])
+        rx_lat = float(request.form['rx_lat_field'])
+        rx_lon = float(request.form['rx_lng_field'])
         rx_gain = float(request.form['rx_gain'])
 
         try:
