@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="plot-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="plot-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-body">
@@ -110,7 +110,7 @@
                 {{ form.sys_traffic.label(class="control-label")}}
               </div>
               <div class="col-sm-9">
-                {{ form.sys_traffic(class="form-control", type="text") }}
+                {{ form.sys_traffic(class="form-control") }}
               </div>
             </div>
           </div>
@@ -163,10 +163,10 @@
           <div class="row">
             <div class="form-group">
               <div class="col-sm-3">
-                {{ form.tx_lat.label(class="control-label")}}
+                {{ form.tx_lat_field.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
-                {{ form.tx_lat(class="form-control", id="tx-lat-field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
+                {{ form.tx_lat_field(class="form-control", id="tx_lat_field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
               </div>
             </div>
           </div>
@@ -174,10 +174,10 @@
           <div class="row">
             <div class="form-group">
               <div class="col-sm-3">
-                {{ form.tx_lon.label(class="control-label")}}
+                {{ form.tx_lng_field.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
-                {{ form.tx_lon(class="form-control", id="tx-lng-field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
+                {{ form.tx_lng_field(class="form-control", id="tx_lng_field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
               </div>
             </div>
           </div>
@@ -250,15 +250,15 @@
     });
     */
     google.maps.event.addListener(txMarker, 'drag', txMapMarkerPositionChanged);
-    $("#tx-lat-field").val(txMarker.getPosition().lat().toFixed(4));
-    $("#tx-lng-field").val(txMarker.getPosition().lng().toFixed(4));
+    $("#tx_lat_field").val(txMarker.getPosition().lat().toFixed(4));
+    $("#tx_lng_field").val(txMarker.getPosition().lng().toFixed(4));
   }
 
   function showTxPosition(position) {
-      if ( ($("#tx-lat-field").val() != position.coords.latitude.toFixed(4)) ||
-          ($("#tx-lng-field").val() != position.coords.longitude.toFixed(4))) {
-        $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
-        $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
+      if ( ($("#tx_lat_field").val() != position.coords.latitude.toFixed(4)) ||
+          ($("#tx_lng_field").val() != position.coords.longitude.toFixed(4))) {
+        $("#tx_lat_field").val(position.coords.latitude.toFixed(4));
+        $("#tx_lng_field").val(position.coords.longitude.toFixed(4));
         txPositionChanged();
         inputHasChanged();
     }
@@ -266,12 +266,12 @@
 
   function txMapMarkerPositionChanged(e) {
     inputHasChanged();
-    $("#tx-lat-field").val(e.latLng.lat().toFixed(4));
-    $("#tx-lng-field").val(e.latLng.lng().toFixed(4));
+    $("#tx_lat_field").val(e.latLng.lat().toFixed(4));
+    $("#tx_lng_field").val(e.latLng.lng().toFixed(4));
   }
 
   function txPositionChanged() {
-    txMarker.setPosition(new google.maps.LatLng($('#tx-lat-field').val(), $('#tx-lng-field').val()));
+    txMarker.setPosition(new google.maps.LatLng($('#tx_lat_field').val(), $('#tx_lng_field').val()));
   }
 
   function inputHasChanged() {

@@ -172,8 +172,8 @@ def areapredict():
         sys_freq = float(request.form['sys_freq'])
 
         tx_name = request.form['tx_name'].strip()
-        tx_lat = float(request.form['tx_lat'])
-        tx_lon = float(request.form['tx_lon'])
+        tx_lat = float(request.form['tx_lat_field'])
+        tx_lon = float(request.form['tx_lng_field'])
         tx_gain = float(request.form['tx_gain'])
 
         ssn = current_app.config['SSN_DATA'][str(sys_year)]['{:d}'.format(sys_month)]
