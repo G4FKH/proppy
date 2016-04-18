@@ -12,6 +12,7 @@ from proppy.propAreaPlot import PropAreaPlot
 
 from ..main.forms import P2PForm, AreaForm
 from .validation_error import ValidationError
+from .iturhfprop_error import ITURHFPropError
 
 from . import ajax
 
@@ -225,12 +226,14 @@ def areapredict():
 
         FNULL = open(os.devnull, 'w')
         output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=False)
-        subprocess.call(["wine",
+        return_code = subprocess.call(["wine",
             current_app.config['ITURHFPROP_APPLICATION_PATH'],
             input_file.name,
             output_file.name],
             stdout=FNULL,
             stderr=subprocess.STDOUT)
+        if return_code != 15:
+            raise ITURHFPropError("Internal Server Error: Return Code {:d}".format(return_code))
         pap = PropAreaPlot(output_file.name)
         png_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix=".png", dir=current_app.config['AREA_PLOT_DIR_PATH'], delete=False)
         png_file_base = os.path.splitext(png_file.name)[0]
@@ -350,6 +353,12 @@ def areapredicttest():
 
 @ajax.errorhandler(ValidationError)
 def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
+@ajax.errorhandler(ITURHFPropError)
+def handle_iturhfprop_error(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
