@@ -255,9 +255,13 @@
   }
 
   function showTxPosition(position) {
-    $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
-    $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
-    txPositionChanged();
+      if ( ($("#tx-lat-field").val() != position.coords.latitude.toFixed(4)) ||
+          ($("#tx-lng-field").val() != position.coords.longitude.toFixed(4))) {
+        $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
+        $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
+        txPositionChanged();
+        inputHasChanged();
+    }
   }
 
   function txMapMarkerPositionChanged(e) {

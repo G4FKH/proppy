@@ -293,15 +293,23 @@
   }
 
   function showTxPosition(position) {
-    $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
-    $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
-    txPositionChanged();
+    if ( ($("#tx-lat-field").val() != position.coords.latitude.toFixed(4)) ||
+        ($("#tx-lng-field").val() != position.coords.longitude.toFixed(4))) {
+      $("#tx-lat-field").val(position.coords.latitude.toFixed(4));
+      $("#tx-lng-field").val(position.coords.longitude.toFixed(4));
+      txPositionChanged();
+      inputHasChanged();
+    }
   }
 
   function showRxPosition(position) {
-    $("#rx-lat-field").val(position.coords.latitude.toFixed(4));
-    $("#rx-lng-field").val(position.coords.longitude.toFixed(4));
-    rxPositionChanged();
+    if ( ($("#rx-lat-field").val() != position.coords.latitude.toFixed(4)) ||
+        ($("#rx-lng-field").val() != position.coords.longitude.toFixed(4))) {
+      $("#rx-lat-field").val(position.coords.latitude.toFixed(4));
+      $("#rx-lng-field").val(position.coords.longitude.toFixed(4));
+      rxPositionChanged();
+      inputHasChanged();
+    }
   }
 
   function txMapMarkerPositionChanged(e) {
