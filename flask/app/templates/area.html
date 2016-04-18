@@ -361,6 +361,9 @@
             message = result['responseJSON']['message'];
           }
           $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
+          $('#modal-plot').attr('src', '');
+          $('#plot-div').empty();
+          $('#do-prediction-button').prop('disabled', false);
     	}
   	});
   }
