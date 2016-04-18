@@ -253,7 +253,7 @@ def areapredict():
         for err in errorMessages:
             print(err)
     """
-    errorerror_msg = ""
+    error_msg = ""
     for fieldName, errorMessages in form.errors.items():
         for err in errorMessages:
             error_msg += "["+fieldName+"] "+err

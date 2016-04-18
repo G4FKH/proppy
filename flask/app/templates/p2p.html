@@ -458,11 +458,20 @@
   	error: function(result) {
   			// Handle errors here
   			//console.log('ERRORS: ' + JSON.stringify(result));
-        var message = "An undefined error has occured.";
-        if (result['responseJSON']['message'] != undefined) {
-          message = result['responseJSON']['message'];
+        var message = "";
+        if (result.hasOwnProperty('responseJSON')) {
+          console.log('have responseJSON');
+          message = result['responseJSON']['statusText']
+        } else if (result.hasOwnProperty('statusText')) {
+          console.log('have status text');
+          message = result['statusText'];
+        } else {
+          console.log('default');
+          message = "An undefined error has occured.";
         }
         $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
+        $('#map-canvas').empty();
+        $('#do-prediction-button').prop('disabled', false);
   		}
   	});
   }
