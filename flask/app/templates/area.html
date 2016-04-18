@@ -52,7 +52,7 @@
       <div class="modal-content">
         <div class="modal-body">
       	   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-           <img src="" id="modal-plot" style="width: 100%;" >
+           <img src="#" id="modal-plot" alt="Prediction Plot" style="width: 100%;" >
          </div>
       </div>
     </div>
@@ -68,7 +68,7 @@
     </div>
   </div>
 
-	<form class="form-horizontal" role="form" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
+	<form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
     {{ form.csrf_token }}
     <div class="row">
       <div class="col-sm-6">
@@ -95,7 +95,7 @@
               </div>
               <div class="col-sm-9">
                 <div class='input-group date' id='datetimepicker'>
-                  <input type='text' class="form-control" name="date", required=true/>
+                  <input type='text' class="form-control" name="date" required />
                   <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                   </span>
@@ -145,7 +145,7 @@
           <legend>Tx. Site
             <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
             <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
-              <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label"Geo"></span>
+              <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
             </button>
           </legend>
 
