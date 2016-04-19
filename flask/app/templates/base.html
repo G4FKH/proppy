@@ -3,8 +3,9 @@
 
 {% block head %}
   {{ super() }}
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <meta charset="UTF-8">
+  <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> -->
+  <!-- <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> -->
 {% endblock %}
 
 {% block styles %}
@@ -18,10 +19,10 @@
   {% block page_content %}
   {% endblock %}
     {% block footer %}
-    <div class='clearfix'></div>
-    <div id="footer">
-    &copy; 2016 <a href="mailto:jwatson@mac.com">James Watson</a>.
+      <div class='clearfix'></div>
+      <div id="footer">
+        &copy; 2016 <a href="mailto:jimwatson@mac.com">James Watson</a>.
+      </div>
     {% endblock %}
-  </div>
 </div>
 {% endblock %}
