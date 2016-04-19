@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Online Rec. P.533-13 Propagation Prediction{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+  <meta name="description" content="Online HF propagation prediction using the ITU Recommendation P.533-13 Propagation Prediction Application.">
+{% endblock %}
+
+{% block page_content %}
+
+<!-- Static navbar -->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Proppy</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="{{ url_for('main.p2p_predict') }}">P2P</a></li>
+        <li><a href="{{ url_for('main.area_predict') }}">Area</a></li>
+        <li class="active"><a href="#">About</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container-fluid -->
+</nav>
+
+<div class="container" style="max-width: 970px;">
+	<div class="page-header">
+		<h1>Proppy <small>HF Circuit Prediction: About</small></h1>
+	</div>
+  <p>
+    Predictions created on this site are created with the ITU's
+    <a href="https://www.itu.int/rec/R-REC-P.533-13-201507-I/en">Recomendation
+    P.533</a> (Method for the prediction of the performance of HF circuits)
+    using the <a href="https://www.itu.int/oth/R0A0400006F/en">ITURHFPROP</a>
+    application (A software method for the prediction
+    of the performance of HF circuits based on Recommendation ITU-R P.533-12)
+  </p>
+  <h2>Acknowledgements</h2>
+  <p>Development of this web application has been made possible with the
+    generous assistance of Chris Behm and George Engelbrecht, creators of the
+    ITURHFPROP application.
+  </p>
+  </thead>
+
+
+
+
+
+
+
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

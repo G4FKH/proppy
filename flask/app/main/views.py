@@ -29,6 +29,11 @@ def area_predict():
     return render_template('area.html', form=area_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year)
 
 
+@main.route('/about')
+def about():
+    return render_template('about.html')
+
+
 @main.route('/areatest')
 def area_predict_test():
     area_form = AreaForm()
