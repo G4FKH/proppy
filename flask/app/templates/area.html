@@ -59,17 +59,16 @@
   </div>
 
 
-  <div class="row m-t-15">
-    <div class="col-sm-offset-5 col-sm-2 text-center">
-      <button id="do-prediction-button" type="button" class="btn btn-primary" disabled>
-        Run Prediction
-        <span class="glyphicon glyphicon glyphicon-refresh"></span>
-      </button>
-    </div>
-  </div>
-
 	<form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.areapredict') }}" enctype="multipart/form-data">
     {{ form.csrf_token }}
+    <div class="row m-t-15">
+      <div class="col-sm-offset-5 col-sm-2 text-center">
+        <button id="do-prediction-button" type="submit" class="btn btn-primary" disabled>
+          Run Prediction
+          <span class="glyphicon glyphicon glyphicon-refresh"></span>
+        </button>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-6">
         <fieldset>
@@ -306,6 +305,7 @@
   });
 
   $( '#parameters_form' ).submit( function( e ) {
+    console.log('click');
     do_prediction(e.target);
     e.preventDefault();
   });
@@ -387,10 +387,6 @@ $(document).ready(function(){
 
     $('#tx-geolocation-button').on('click', function (e) {
       navigator.geolocation.getCurrentPosition(showTxPosition);
-    });
-
-    $('#do-prediction-button').on('click', function (e) {
-      do_prediction($('#parameters_form')[0]);
     });
 
     $('#do-prediction-button').prop('disabled', false);
