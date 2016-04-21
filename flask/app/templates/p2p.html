@@ -60,47 +60,51 @@
 	<form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
     {{ p2p_form.csrf_token }}
     <div class="row">
-        <div class="col-sm-12">
-          <fieldset>
-            <legend>System</legend>
-            <!-- https://github.com/eternicode/bootstrap-datepicker -->
+      <div class="col-sm-12">
+        <fieldset>
+          <legend>System</legend>
+          <input type="hidden" name="month" />
+          <input type="hidden" name="year" />
 
-        <input type="hidden" name="month" />
-        <input type="hidden" name="year" />
-
-        <div class="form-group">
-          <div class="col-sm-1">
-            <label class="control-label">Date</label>
+          <div class="row">
+            <div class="form-group">
+              <div class="col-sm-2">
+                <label class="control-label">Date</label>
+              </div>
+              <div class="col-sm-4">
+              <div class='input-group date' id='datetimepicker'>
+                <input type='text' class="form-control" name="date" required />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+              </div>
+              </div>
+                <div class="col-sm-2">
+                  {{p2p_form.sys_plot_type.label(class="control-label")}}
+                </div>
+                <div class="col-sm-4">
+                  {{ p2p_form.sys_plot_type(class="form-control") }}
+                </div>
+              </div>
           </div>
-          <div class="col-sm-2">
-          <div class='input-group date' id='datetimepicker'>
-            <input type='text' class="form-control" name="date" required />
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-              </span>
-          </div>
-        </div>
 
-         <div class="col-sm-1">
-           {{p2p_form.sys_traffic.label(class="control-label")}}
-         </div>
-         <div class="col-sm-2">
-           {{ p2p_form.sys_traffic(class="form-control") }}
-         </div>
-         <div class="col-sm-1">
-           {{p2p_form.sys_pwr.label(class="control-label")}}
-         </div>
-         <div class="col-sm-2">
-           {{ p2p_form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
-         </div>
+            <div class="row">
+              <div class="form-group">
+                <div class="col-sm-2">
+                  {{p2p_form.sys_traffic.label(class="control-label")}}
+                </div>
+                <div class="col-sm-4">
+                  {{ p2p_form.sys_traffic(class="form-control") }}
+                </div>
+               <div class="col-sm-2">
+                 {{p2p_form.sys_pwr.label(class="control-label")}}
+               </div>
+               <div class="col-sm-3">
+                 {{ p2p_form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
+               </div>
+              </div>
+            </div>
 
-         <div class="col-sm-1">
-           {{p2p_form.sys_plot_type.label(class="control-label")}}
-         </div>
-         <div class="col-sm-2">
-           {{ p2p_form.sys_plot_type(class="form-control") }}
-         </div>
-       </div>
      </fieldset>
       </div>
     </div>
@@ -118,10 +122,10 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.tx_name.label(class="control-label")}}
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-8">
               {{ p2p_form.tx_name(class="form-control", type="text") }}
             </div>
           </div>
@@ -129,10 +133,10 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.tx_lat_field.label(class="control-label")}}
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-4">
               {{ p2p_form.tx_lat_field(class="form-control", id="tx_lat_field", onchange="txPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
             </div>
           </div>
@@ -140,10 +144,10 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.tx_lng_field.label(class="control-label")}}
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-4">
               {{ p2p_form.tx_lng_field(class="form-control", id="tx_lng_field", onchange="txPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
             </div>
           </div>
@@ -151,10 +155,10 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.tx_gain.label(class="control-label")}}
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-4">
               {{ p2p_form.tx_gain(class="form-control", type="number", min="0", max="20.0", step="0.01", value="2.16", required=true) }}
             </div>
           </div>
@@ -174,10 +178,10 @@
         </legend>
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.rx_name.label(class="control-label")}}
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-8">
               {{ p2p_form.rx_name(class="form-control", type="text") }}
             </div>
           </div>
@@ -185,10 +189,10 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.rx_lat_field.label(class="control-label")}}
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-4">
               {{ p2p_form.rx_lat_field(class="form-control", id="rx_lat_field", onchange="rxPositionChanged()", type="number", min="-90.0", max="90.0", step="any", required=true) }}
             </div>
           </div>
@@ -196,10 +200,10 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.rx_lng_field.label(class="control-label")}}
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-4">
               {{ p2p_form.rx_lng_field(class="form-control", id="rx_lng_field", onchange="rxPositionChanged()", type="number", min="-180.0", max="180.0", step="any", required=true) }}
             </div>
           </div>
@@ -207,7 +211,7 @@
 
         <div class="row">
           <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               {{p2p_form.rx_gain.label(class="control-label")}}
             </div>
             <div class="col-sm-5">
