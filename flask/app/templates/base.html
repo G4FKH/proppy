@@ -1,16 +1,19 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}Fubar{% endblock %}
+
+{% block metas %}
+    <meta charset="UTF-8">
+    {{ super() }}
+{% endblock %}
 
 {% block head %}
-  {{ super() }}
-  <meta charset="UTF-8">
-  <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> -->
-  <!-- <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> -->
+    {{ super() }}
+    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> -->
+    <!-- <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"> -->
 {% endblock %}
 
 {% block styles %}
-  {{ super() }}
-  <link href="{{ url_for('static', filename='css/proppy.css') }}" rel="stylesheet">
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/proppy.css') }}" rel="stylesheet">
 {% endblock %}
 
 
