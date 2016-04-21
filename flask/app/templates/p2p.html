@@ -48,17 +48,16 @@
     </div>
   </div>
 
-  <div class="row m-t-15">
-    <div class="col-sm-offset-5 col-sm-2 text-center">
-      <button id="do-prediction-button" type="button" class="btn btn-primary" disabled>
-        Run Prediction
-        <span class="glyphicon glyphicon glyphicon-refresh"></span>
-      </button>
-    </div>
-  </div>
-
 	<form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
     {{ p2p_form.csrf_token }}
+    <div class="row m-t-15">
+      <div class="col-sm-offset-5 col-sm-2 text-center">
+        <button id="do-prediction-button" type="submit" class="btn btn-primary" disabled>
+          Run Prediction
+          <span class="glyphicon glyphicon glyphicon-refresh"></span>
+        </button>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-12">
         <fieldset>
@@ -115,7 +114,7 @@
       <fieldset>
         <legend>Tx. Site
           <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
-          <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
+          <button id="tx-geolocation-button" type="submit" class="btn btn-primary btn-xs">
             <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
           </button>
         </legend>
@@ -374,6 +373,11 @@
       $("#ajax-spinner").hide();
   });
 
+  $("#parameters_form").submit( function ( e ) {
+    do_prediction(e.target);
+    e.preventDefault();
+  });
+
   function do_prediction(form) {
   	var form_obj = form;
     var dt = $("#datetimepicker").data("DateTimePicker").date();
@@ -505,10 +509,6 @@ $(document).ready(function(){
 
     $('#rx-geolocation-button').on('click', function (e) {
       navigator.geolocation.getCurrentPosition(showRxPosition);
-    });
-
-    $('#do-prediction-button').on('click', function (e) {
-      do_prediction($('#parameters_form')[0]);
     });
 
     $('#do-prediction-button').prop('disabled', false);
