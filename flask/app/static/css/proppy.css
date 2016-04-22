@@ -66,10 +66,6 @@ button.plot-zoom {
   width:100%;
 }
 
-#modal-plot-canvas {
-  width: 90%;
-}
-
 #plot-zoom-div {
   display: none;
 }
@@ -81,6 +77,7 @@ button.plot-zoom {
 
   #modal-plot-canvas {
     width: 80%;
+    padding-left: 5%;
   }
 
   #plot-zoom-div {
