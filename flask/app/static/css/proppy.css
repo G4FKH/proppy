@@ -41,6 +41,11 @@ button.plot-zoom {
   margin-left: 6px;
 }
 
+/*
+.modal .graphDiv {
+  width: 25%;
+}
+*/
 /* Ajax dimming */
 #ajax-spinner {
     background-color: #333;
@@ -55,4 +60,23 @@ button.plot-zoom {
     background-image: url('../img/ajax-loader.gif');
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.modal-dialog  {
+  width:100%;
+}
+
+#modal-plot-canvas {
+  width: 90%;
+}
+
+
+@media screen and (min-width: 768px) {
+	.modal-dialog  {
+    width:90%;
+  }
+
+  #modal-plot-canvas {
+    width: 80%;
+  }
 }

@@ -45,10 +45,31 @@
     </div>
     <div class="col-sm-6">
       <div id="plot-div"></div>
+      <div id="plot-zoom-div" class="text-center"></div>
     </div>
   </div>
 
-	<form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="tmp-plot-div"></div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-plot" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+      	   <button type="button" class="close" data-dismiss="modal">
+             <span aria-hidden="true">&times;</span>
+             <span class="sr-only">Close</span>
+           </button>
+           <div id="modal-plot-canvas" ></div>
+         </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
     {{ p2p_form.csrf_token }}
     <div class="row m-t-15">
       <div class="col-sm-offset-5 col-sm-2 text-center">
@@ -239,6 +260,8 @@
   var gcPath;
   var txMarker;
   var rxMarker;
+  var plotData;
+  var plotLayout;
 
   function initMap() {
     var mapDiv = document.getElementById('map-canvas');
@@ -457,9 +480,11 @@
           pad: 4
         },
       };
-      Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
-      /*Shift the map around to accomodate the plot */
+      plotData = result;
+      plotLayout = layout;
       $('#flash-container').empty();
+      Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
+      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary">Open <span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },
@@ -468,13 +493,10 @@
   			//console.log('ERRORS: ' + JSON.stringify(result));
         var message = "";
         if (result.hasOwnProperty('responseJSON')) {
-          console.log('have responseJSON');
           message = result['responseJSON']['statusText']
         } else if (result.hasOwnProperty('statusText')) {
-          console.log('have status text');
           message = result['statusText'];
         } else {
-          console.log('default');
           message = "An undefined error has occured.";
         }
         $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
@@ -512,6 +534,19 @@ $(document).ready(function(){
     });
 
     $('#do-prediction-button').prop('disabled', false);
+
+    $(document).on("click", ".pop",function() {
+			$('#modal-plot').modal('show');
+      $('#plot-div').empty();
+      plotLayout['width'] = $(window).width() * 0.8;
+      Plotly.newPlot('modal-plot-canvas', [plotData['p'], plotData['m']], plotLayout);
+		});
+
+    $('#modal-plot').on('hidden.bs.modal', function (e) {
+      console.log('hello again');
+      plotLayout['width'] = $('#plot-div').width();
+      Plotly.newPlot('plot-div', [plotData['p'], plotData['m']], plotLayout);
+    });
 });
 </script>
 {% endblock %}
