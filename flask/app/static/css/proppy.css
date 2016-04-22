@@ -70,6 +70,9 @@ button.plot-zoom {
   width: 90%;
 }
 
+#plot-zoom-div {
+  display: none;
+}
 
 @media screen and (min-width: 768px) {
 	.modal-dialog  {
@@ -79,4 +82,12 @@ button.plot-zoom {
   #modal-plot-canvas {
     width: 80%;
   }
+
+  #plot-zoom-div {
+    display: block;
+    position: absolute;
+    right: 44px;
+    bottom: 16px;
+  }
+
 }

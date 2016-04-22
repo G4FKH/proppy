@@ -45,7 +45,7 @@
     </div>
     <div class="col-sm-6">
       <div id="plot-div"></div>
-      <div id="plot-zoom-div" class="text-center"></div>
+      <div id="plot-zoom-div"></div>
     </div>
   </div>
 
@@ -473,8 +473,8 @@
           }
         },
         margin: {
-          l: 50,
-          r: 50,
+          l: 40,
+          r: 20,
           b: 50,
           t: 50,
           pad: 4
@@ -484,7 +484,7 @@
       plotLayout = layout;
       $('#flash-container').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
-      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary">Open <span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
+      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },
