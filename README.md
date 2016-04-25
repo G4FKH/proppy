@@ -10,7 +10,11 @@ may be run in standalone mode to produce pdf plots from a command line or as
 utilities by the flask application.
 * 'flask' contains the flask application
 
-The ITUHFProp application is not included in the repository.  
+The ITUHFProp application is required to run the application and is available from
+[https://www.itu.int/oth/R0A0400006F/en](https://www.itu.int/oth/R0A0400006F/en).  
+After unzipping the file, the ITURHFProp.exe and p533.dll files should be
+copied to the flask/bin directory.  The contents of the Data directory should be
+copied to flask/data.  
 
 ##Installing the Flask Application
 1. Edit 'config.py' to point to the location of ITUHFProp
@@ -40,7 +44,7 @@ Create the file /etc/httpd/conf.d/wsgi.conf with the contents;
 ### Apache Configuration
 
 Add the following to the sites/available/000-default.conf
- 
+
     WSGIDaemonProcess fubar user=jwatson group=www-data threads=5 python-path=/var/www/nubar/
     WSGIScriptAlias /nubar /var/www/nubar/fubar.wsgi
     <directory /var/www/nubar>
@@ -50,4 +54,3 @@ Add the following to the sites/available/000-default.conf
         Order deny,allow
         Allow from all
     </directory>
-
