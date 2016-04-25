@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     # Replace thevaluebelow with your own secret key...
-    SECRET_KEY = 'kdaMmYwBTkepkFwtnR6N'
+    SECRET_KEY = 'your_secret_key'
 
     ITURHFPROP_APPLICATION_PATH = os.path.join(basedir,'bin/ITURHFProp.exe')
     ITURHFPROP_DATA_PATH = os.path.join(basedir,'data/')
