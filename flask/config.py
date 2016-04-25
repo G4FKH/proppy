@@ -3,13 +3,14 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
+    # Replace thevaluebelow with your own secret key...
     SECRET_KEY = 'kdaMmYwBTkepkFwtnR6N'
 
-    ITURHFPROP_APPLICATION_PATH = '/home/jwatson/rec533/ITURHFProp.exe'
-    ITURHFPROP_DATA_PATH = '/usr/local/share/ituhfprop/Data/'
-    SSN_DATA_PATH = '/home/jwatson/github/proppy/ssn.json'
+    ITURHFPROP_APPLICATION_PATH = os.path.join(basedir,'bin/ITURHFProp.exe')
+    ITURHFPROP_DATA_PATH = os.path.join(basedir,'data/')
+    SSN_DATA_PATH = os.path.join(basedir,'ssn.json')
 
-    AREA_PLOT_DIR_PATH = '/home/jwatson/github/proppy/flask/app/static/img/area/'
+    AREA_PLOT_DIR_PATH = os.path.join(basedir,'app/static/img/area')
 
     with open(SSN_DATA_PATH) as ssn_data_file:
         SSN_DATA = json.load(ssn_data_file)
