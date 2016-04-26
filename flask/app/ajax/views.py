@@ -92,6 +92,7 @@ def predict():
         output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=True)
         subprocess.call(["wine",
             current_app.config['ITURHFPROP_APPLICATION_PATH'],
+            '-s',
             input_file.name,
             output_file.name],
             stdout=FNULL,
@@ -228,6 +229,7 @@ def areapredict():
         output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=False)
         return_code = subprocess.call(["wine",
             current_app.config['ITURHFPROP_APPLICATION_PATH'],
+            '-s',
             input_file.name,
             output_file.name],
             stdout=FNULL,
@@ -329,6 +331,7 @@ def areapredicttest():
     output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=False)
     subprocess.call(["wine",
         current_app.config['ITURHFPROP_APPLICATION_PATH'],
+        '-s',
         input_file.name,
         output_file.name],
         stdout=FNULL,
