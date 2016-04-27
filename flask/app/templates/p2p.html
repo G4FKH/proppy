@@ -547,7 +547,6 @@ $(document).ready(function(){
 		});
 
     $('#modal-plot').on('hidden.bs.modal', function (e) {
-      console.log('hello again');
       plotLayout['width'] = $('#plot-div').width();
       Plotly.newPlot('plot-div', [plotData['p'], plotData['m']], plotLayout);
     });
