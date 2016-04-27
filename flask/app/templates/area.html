@@ -78,10 +78,10 @@
           <input type="hidden" name="year" />
           <div class='row'>
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.sys_plot_type.label(class="control-label")}}
               </div>
-              <div class="col-sm-9">
+              <div class="col-sm-8">
                 {{ form.sys_plot_type(class="form-control") }}
               </div>
             </div>
@@ -89,10 +89,10 @@
 
           <div class='row'>
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 <label class="control-label">Date / Time</label>
               </div>
-              <div class="col-sm-9">
+              <div class="col-sm-8">
                 <div class='input-group date' id='datetimepicker'>
                   <input type='text' class="form-control" name="date" required />
                   <span class="input-group-addon">
@@ -105,10 +105,10 @@
 
           <div class='row'>
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.sys_traffic.label(class="control-label")}}
               </div>
-              <div class="col-sm-9">
+              <div class="col-sm-8">
                 {{ form.sys_traffic(class="form-control") }}
               </div>
             </div>
@@ -116,7 +116,7 @@
 
           <div class='row'>
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.sys_freq.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
@@ -127,14 +127,25 @@
 
           <div class='row'>
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.sys_pwr.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
                {{ form.sys_pwr(class="form-control", type="number", min="1", max="1000000000", step="1", value="100.0", required=true) }}
               </div>
             </div>
-          </div> <!-- end of row -->
+          </div>
+
+          <div class='row'>
+            <div class="form-group">
+              <div class="col-sm-4">
+                {{ form.sys_mm_noise.label(class="control-label")}}
+              </div>
+              <div class="col-sm-5">
+               {{ form.sys_mm_noise(class="form-control") }}
+              </div>
+            </div>
+          </div>
         </fieldset>
       </div>
 
@@ -150,10 +161,10 @@
 
           <div class="row">
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.tx_name.label(class="control-label") }}
               </div>
-              <div class="col-sm-9">
+              <div class="col-sm-8">
                 {{ form.tx_name(class="form-control", type="text") }}
               </div>
             </div>
@@ -161,7 +172,7 @@
 
           <div class="row">
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.tx_lat_field.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
@@ -172,7 +183,7 @@
 
           <div class="row">
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.tx_lng_field.label(class="control-label")}}
               </div>
               <div class="col-sm-5">
@@ -183,7 +194,7 @@
 
           <div class="row">
             <div class="form-group">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.tx_gain.label(class="control-label")}}
               </div>
               <div class="col-sm-5">

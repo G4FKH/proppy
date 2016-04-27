@@ -33,8 +33,10 @@ def predict():
             sys_year = int(request.form['year'])
         except:
             raise ValidationError("Invalid value for year.")
+
         sys_month = int(request.form['month'])
         sys_plot_type = request.form['sys_plot_type']
+        sys_mm_noise = request.form['sys_mm_noise']
 
         tx_name = request.form['tx_name'].strip()
         tx_lat = float(request.form['tx_lat_field'])
@@ -85,7 +87,7 @@ def predict():
         input_file.write('Path.BW {:.1f}\n'.format(traffic[1]))
         input_file.write('Path.SNRr {:.1f}\n'.format(traffic[2]))
         input_file.write('Path.Relr 90\n')
-        input_file.write('Path.ManMadeNoise "RURAL"\n')
+        input_file.write('Path.ManMadeNoise "{:s}"\n'.format(sys_mm_noise))
 
         if len(traffic) == 3:
             input_file.write('Path.Modulation "ANALOG"\n')
@@ -201,6 +203,8 @@ def areapredict():
             sys_hour = 24
         sys_freq = float(request.form['sys_freq'])
 
+        sys_mm_noise = request.form['sys_mm_noise']
+
         tx_name = request.form['tx_name'].strip()
         tx_lat = float(request.form['tx_lat_field'])
         tx_lon = float(request.form['tx_lng_field'])
@@ -232,7 +236,7 @@ def areapredict():
         input_file.write('Path.BW {:.1f}\n'.format(traffic[1]))
         input_file.write('Path.SNRr {:.1f}\n'.format(traffic[2]))
         input_file.write('Path.Relr 90\n')
-        input_file.write('Path.ManMadeNoise "RURAL"\n')
+        input_file.write('Path.ManMadeNoise "{:s}"\n'.format(sys_mm_noise))
 
         if len(traffic) == 3:
             input_file.write('Path.Modulation "ANALOG"\n')
@@ -311,6 +315,8 @@ def areapredicttest():
         sys_hour = 24
     sys_freq = float(request.form['sys_freq'])
 
+    sys_mm_noise = request.form['sys_mm_noise']
+
     tx_name = request.form['tx_name'].strip()
     tx_lat = float(request.form['tx_lat'])
     tx_lon = float(request.form['tx_lon'])
@@ -345,7 +351,7 @@ def areapredicttest():
     input_file.write('Path.BW {:.1f}\n'.format(traffic['bw']))
     input_file.write('Path.SNRr {:.1f}\n'.format(traffic['snr']))
     input_file.write('Path.Relr 90\n')
-    input_file.write('Path.ManMadeNoise "RURAL"\n')
+    input_file.write('Path.ManMadeNoise "{:s}"\n'.format(sys_mm_noise))
 
     if len(traffic) == 3:
         input_file.write('Path.Modulation "ANALOG"\n')
