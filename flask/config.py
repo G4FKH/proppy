@@ -22,7 +22,34 @@ class Config:
 
     """
     TRAFFIC_CHOICES is a mandatory element and is used to define the
-    options in the drop down combos
+    options in the drop down combos.
+
+    TRAFFIC_CHOICES comprises a dictionary of tuples where each tuple
+    is a sequence of either three or nine parameters representing
+    analog and digital traffic types as follows;
+
+    Analogue Traffic
+    0 A text label describing the traffic
+    1 bandwdth (Hz) [Path.BW]
+    2 Required SNR (dB) [Path.SNRr]
+
+    Digital Traffic
+    0 A text label describing the traffic
+    1 bandwdth (Hz) [Path.BW]
+    2 Required SNR (dB) [Path.SNRr]
+    3 Required Signal-to-interference ratio (dB), between -30.0 and 200.0 [Path.SIRr]
+    4 Required Amplitude Ratio (dB), between 0.0 and 50.0 [Path.A]
+    5 Time window (ms), between 0.0 and 50.0 [Path.TW]
+    6 Frequency window (Hz), between 0.0 and 1000.0 [Path.FW]
+    7 Time spread for simple BCR (ms), between 0.0 and 1000.0 [Path.T0]
+    8 Frequency dispersion for simple BCR (Hz), between 0.0 and 1000.0 [Path.F0]
+
+    Example
+
+    TRAFFIC_CHOICES = {'SSB':('SSB', 3000, 13), 'CW':('CW', 500, 0)}
+
+    Defines two traffic types; SSB (bandwidth = 3000Hz, SNR = 13dB) and
+    CW 9bandwidth = 500Hz, SNR = 0dB)
     """
     TRAFFIC_CHOICES = {'SSB':('SSB', 3000, 13), 'CW':('CW', 500, 0)}
 
