@@ -3,7 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    # Replace thevaluebelow with your own secret key...
+    # Replace the value below with your own secret key...
     SECRET_KEY = 'your_secret_key'
 
     ITURHFPROP_APPLICATION_PATH = os.path.join(basedir,'bin/ITURHFProp.exe')
@@ -20,6 +20,16 @@ class Config:
     MAX_YEAR = max(SSN_DATA.keys())
     MAX_MONTH = max(SSN_DATA[MAX_YEAR].keys())
 
+    """
+    TRAFFIC_CHOICES is a mandatory element and is used to define the
+    options in the drop down combos
+    """
+    TRAFFIC_CHOICES = {'SSB':('SSB', 3000, 13), 'CW':('CW', 500, 0)}
+
+    """
+    PLOT_COLORSCALE is an optional element and if defined, specifies the
+    color map used with plotly.
+    """
     PLOT_COLORSCALE = "[[0, 'rgb(166,206,227)'], [0.25, 'rgb(31,120,180)'], [0.45, 'rgb(178,223,138)'], [0.65, 'rgb(51,160,44)'], [0.85, 'rgb(251,154,153)'], [1, 'rgb(227,26,28)']]"
 
     @staticmethod

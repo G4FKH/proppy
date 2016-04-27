@@ -7,7 +7,9 @@ from flask_wtf.file import FileField
 
 class P2PForm(Form):
     sys_pwr = DecimalField("Pwr(W)", [NumberRange(1, 1000000000)])
-    sys_traffic = SelectField("Traffic", choices=[('cw', 'CW (BW=500Hz / SNR=0dB)'), ('ssb', 'SSB (BW=3kHz / SNR=13dB)')])
+    sys_traffic = SelectField("Traffic") #Choices are now added dynamically in views.py
+
+
     sys_plot_type = SelectField("Plot", choices=[('BCR', 'Reliability'), ('SNR', 'SNR'), ('E', 'Signal Strength')])
 
     month = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=1, max=12)])
@@ -26,7 +28,7 @@ class P2PForm(Form):
 
 class AreaForm(Form):
     sys_pwr = DecimalField("Power (W)", [Required(), NumberRange(1, 1000000000)])
-    sys_traffic = SelectField("Traffic", choices=[('cw', 'CW (BW=500Hz / SNR=0dB)'), ('ssb', 'SSB (BW=3kHz / SNR=13dB)')])
+    sys_traffic = SelectField("Traffic") #Choices are now added dynamically in views.py
     sys_plot_type = SelectField("Plot Type", choices=[('BCR', 'Reliability'), ('SNR', 'SNR'), ('E', 'Signal Strength')])
     sys_freq = DecimalField("Freq (MHz)",  [Required(), NumberRange(2, 30)])
 

@@ -11,6 +11,11 @@ from .forms import P2PForm, AreaForm
 def p2p_predict():
     p2p_form = P2PForm()
 
+    sys_traffic_choices =[]
+    for key, traffic in current_app.config['TRAFFIC_CHOICES'].items():
+        sys_traffic_choices.append((traffic[0], "{:s} (BW={:d}Hz / SNR={:d}dB)".format(traffic[0], traffic[1], traffic[2])))
+    p2p_form.sys_traffic.choices = sys_traffic_choices
+
     min_year = current_app.config['MIN_YEAR']
     min_month = current_app.config['MIN_MONTH']
     max_year = current_app.config['MAX_YEAR']
@@ -30,6 +35,11 @@ def area_predict():
     min_month = current_app.config['MIN_MONTH']
     max_year = current_app.config['MAX_YEAR']
     max_month = current_app.config['MAX_MONTH']
+
+    sys_traffic_choices =[]
+    for key, traffic in current_app.config['TRAFFIC_CHOICES'].items():
+        sys_traffic_choices.append((traffic[0], "{:s} (BW={:d}Hz / SNR={:d}dB)".format(traffic[0], traffic[1], traffic[2])))
+    area_form.sys_traffic.choices = sys_traffic_choices
 
     return render_template('area.html', form=area_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year)
 
