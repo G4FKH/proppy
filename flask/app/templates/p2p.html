@@ -430,7 +430,6 @@
   		contentType: false,
   		success: function(result) {
 
-      result['colorscale'] = 'Jet';
       //console.log(result);
 
       if (window.innerWidth >= 768) {
@@ -450,6 +449,11 @@
           xpad:3
         };
       }
+      {% if colorscale == None %}
+        result['p']['colorscale'] = 'Jet';
+      {% else %}
+        result['p']['colorscale'] = {{colorscale | safe}};
+      {% endif %}
       //console.log(result['p']['colorbar']);
       var layout = {
         xaxis: {

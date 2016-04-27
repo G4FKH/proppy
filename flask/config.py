@@ -20,6 +20,8 @@ class Config:
     MAX_YEAR = max(SSN_DATA.keys())
     MAX_MONTH = max(SSN_DATA[MAX_YEAR].keys())
 
+    PLOT_COLORSCALE = "[[0, 'rgb(166,206,227)'], [0.25, 'rgb(31,120,180)'], [0.45, 'rgb(178,223,138)'], [0.65, 'rgb(51,160,44)'], [0.85, 'rgb(251,154,153)'], [1, 'rgb(227,26,28)']]"
+
     @staticmethod
     def init_app(app):
         pass

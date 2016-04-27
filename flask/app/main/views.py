@@ -16,7 +16,12 @@ def p2p_predict():
     max_year = current_app.config['MAX_YEAR']
     max_month = current_app.config['MAX_MONTH']
 
-    return render_template('p2p.html', p2p_form=p2p_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year)
+    if 'PLOT_COLORSCALE' in current_app.config:
+        colorscale = current_app.config['PLOT_COLORSCALE']
+    else:
+        colorscale = None
+
+    return render_template('p2p.html', p2p_form=p2p_form, min_month=min_month, min_year=min_year, max_month=max_month, max_year=max_year, colorscale=colorscale)
 
 @main.route('/area')
 def area_predict():
