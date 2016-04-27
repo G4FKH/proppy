@@ -86,7 +86,18 @@ def predict():
         input_file.write('Path.SNRr {:.1f}\n'.format(traffic[2]))
         input_file.write('Path.Relr 90\n')
         input_file.write('Path.ManMadeNoise "RURAL"\n')
-        input_file.write('Path.Modulation "ANALOG"\n')
+
+        if len(traffic) == 3:
+            input_file.write('Path.Modulation "ANALOG"\n')
+        else:
+            input_file.write('Path.Modulation "DIGITAL"\n')
+            input_file.write('Path.SIRr {:.1f}\n'.format(traffic[3]))
+            input_file.write('Path.A {:.1f}\n'.format(traffic[4]))
+            input_file.write('Path.TW {:.1f}\n'.format(traffic[5]))
+            input_file.write('Path.FW {:.1f}\n'.format(traffic[6]))
+            input_file.write('Path.T0 {:.1f}\n'.format(traffic[7]))
+            input_file.write('Path.F0 {:.1f}\n'.format(traffic[8]))
+
         input_file.write('Path.SorL "SHORTPATH"\n')
         input_file.write('RptFileFormat "RPT_OPMUF | RPT_{:s}"\n'.format(sys_plot_type))
         input_file.write('LL.lat {:.2f}\n'.format(rx_lat))
@@ -346,7 +357,7 @@ def areapredicttest():
         input_file.write('Path.FW {:.1f}\n'.format(traffic[6]))
         input_file.write('Path.T0 {:.1f}\n'.format(traffic[7]))
         input_file.write('Path.F0 {:.1f}\n'.format(traffic[8]))
-        
+
     input_file.write('Path.SorL "SHORTPATH"\n')
     input_file.write('RptFileFormat "RPT_RXLOCATION | RPT_{:s}"\n'.format(sys_plot_type))
     input_file.write('LL.lat -90.0\n')
