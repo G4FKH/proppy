@@ -38,6 +38,8 @@ from mpl_toolkits.basemap import Basemap
 
 from rec533Out import REC533Out
 
+from cmap.plotlyAlt import PlotlyAlt
+
 MainModule = "__init__"
 
 class PropP2PPlot:
@@ -62,9 +64,11 @@ class PropP2PPlot:
         #points, plot_type, lons, lats, num_pts_lon, num_pts_lat, global_params, params = dataset
         #plot_dt, ssn, freq = params
         # EDIT THE LINE BELOW TO MODIFY COLOURS IN THE COLORMAP
-        g4fkh = ListedColormap(['#EFFBFB', '#CCFFFF', '#0080FF', '#99FF99', '#00FF00', '#CCFFCC', '#FFFF00', '#FFCC99', '#FF7800', '#FF0000'])
+        #g4fkh = ListedColormap(['#EFFBFB', '#CCFFFF', '#0080FF', '#99FF99', '#00FF00', '#CCFFCC', '#FFFF00', '#FFCC99', '#FF7800', '#FF0000'])
         plt.clf() #Clear any existing plot data, specifically nightshade
-        plt.register_cmap(name='g4fkh', cmap=g4fkh)
+        #plt.register_cmap(name='g4fkh', cmap=g4fkh)
+
+        plt.register_cmap(name='PlotlyAlt', cmap=PlotlyAlt)
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='polar')
@@ -272,7 +276,8 @@ def main(data_file):
                 'RdYlGn_r', 'BuPu_r', 'Pastel1', 'RdPu_r', 'GnBu', 'gist_yarg',
                 'Wistia_r', 'rainbow', 'autumn_r', 'bone_r', 'cubehelix_r',
                 'pink', 'hsv', 'Pastel2', 'RdPu', 'BuPu', 'PuBu', 'Accent_r',
-                'rainbow_r', 'YlGnBu', 'gist_rainbow_r', 'winter_r', 'g4fkh'],
+                'rainbow_r', 'YlGnBu', 'gist_rainbow_r', 'winter_r', 'g4fkh',
+                'PlotlyAlt'],
         help="Specify the colour map to use.  Default = 'jet'"
         )
 
