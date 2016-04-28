@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField, DecimalField, TextField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField, BooleanField, DecimalField, TextField
 from wtforms.validators import Required, Length, NumberRange, InputRequired
 from wtforms.widgets import TextArea, HiddenInput
 from flask_wtf.file import FileField
@@ -17,6 +17,8 @@ class P2PForm(Form):
                                                     ('NOISY', 'Noisy')])
 
     sys_plot_type = SelectField("Plot", choices=[('BCR', 'Reliability'), ('SNR', 'SNR'), ('E', 'Signal Strength')])
+
+    sys_include_raw = BooleanField('Include Text')
 
     month = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=1, max=12)])
     year = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=1900, max=2050)])

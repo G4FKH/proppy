@@ -4,7 +4,7 @@ import os
 import subprocess
 
 from math import log10
-from flask import request, current_app, jsonify, url_for, abort
+from flask import request, current_app, jsonify, url_for, abort, json
 from tempfile import NamedTemporaryFile
 
 from proppy.rec533Out import REC533Out
@@ -37,13 +37,14 @@ def predict():
         sys_month = int(request.form['month'])
         sys_plot_type = request.form['sys_plot_type']
         sys_mm_noise = request.form['sys_mm_noise']
+        sys_include_raw = True if 'sys_include_raw' in request.form else False
 
-        tx_name = request.form['tx_name'].strip()
+        tx_name = json.htmlsafe_dumps(request.form['tx_name'].strip())
         tx_lat = float(request.form['tx_lat_field'])
         tx_lon = float(request.form['tx_lng_field'])
         tx_gain = float(request.form['tx_gain'])
 
-        rx_name = request.form['rx_name'].strip()
+        rx_name = json.htmlsafe_dumps(request.form['rx_name'].strip())
         rx_lat = float(request.form['rx_lat_field'])
         rx_lon = float(request.form['rx_lng_field'])
         rx_gain = float(request.form['rx_gain'])
@@ -166,7 +167,12 @@ def predict():
             'colorbar': rel_cb_dict
         }
         #print(p)
-        response = {'m':m, 'p':p}
+        if sys_include_raw:
+            with open(output_file.name, 'r') as prediction_out:
+                raw = prediction_out.read()
+            response = {'m':m, 'p':p, 'raw':raw}
+        else:
+            response = {'m':m, 'p':p}
         os.remove(input_file.name)
         return jsonify(**response)
     """
@@ -204,7 +210,9 @@ def areapredict():
 
         sys_mm_noise = request.form['sys_mm_noise']
 
-        tx_name = request.form['tx_name'].strip()
+        sys_include_raw = True if 'sys_include_raw' in request.form else False
+
+        tx_name = json.htmlsafe_dumps(request.form['tx_name'].strip())
         tx_lat = float(request.form['tx_lat_field'])
         tx_lon = float(request.form['tx_lng_field'])
         tx_gain = float(request.form['tx_gain'])
@@ -263,7 +271,6 @@ def areapredict():
 
         input_file.write('DataFilePath "{:s}"\n'.format(current_app.config['ITURHFPROP_DATA_PATH']))
         input_file.close()
-        #print(input_file.name)
 
         FNULL = open(os.devnull, 'w')
         output_file = NamedTemporaryFile(prefix="proppy_", suffix='.out', delete=False)
@@ -287,7 +294,12 @@ def areapredict():
         #print(output_file.name)
         #os.remove(output_file.name)
         img_url = url_for('static', filename='img/area/'+os.path.basename(png_file.name))
-        response = {'img_url':img_url}
+        if sys_include_raw:
+            with open(output_file.name, 'r') as prediction_out:
+                raw = prediction_out.read()
+            response = {'img_url':img_url, 'raw':raw}
+        else:
+            response = {'img_url':img_url}
         return jsonify(**response)
     """
     print('Failed to validate area form;')
