@@ -37,10 +37,6 @@ fieldset legend {
 }
 
 
-button.plot-zoom {
-  margin-left: 6px;
-}
-
 /*
 .modal .graphDiv {
   width: 25%;
@@ -66,6 +62,11 @@ button.plot-zoom {
   width:100%;
 }
 
+button.plot-zoom {
+  margin-left: 6px;
+  display: none;
+}
+
 #plot-zoom-div {
   display: none;
 }
@@ -85,6 +86,10 @@ button.plot-zoom {
     position: absolute;
     right: 44px;
     bottom: 16px;
+  }
+
+  button.plot-zoom {
+    display: block;
   }
 
 }
