@@ -10,5 +10,6 @@ setup(name='proppy',
       py_modules=['proppy.predictionParams',
                     'proppy.propAreaPlot',
                     'proppy.propP2PPlot',
-                    'proppy.rec533Out'],
+                    'proppy.rec533Out',
+                    'proppy.cmap.plotlyAlt'],
      )
