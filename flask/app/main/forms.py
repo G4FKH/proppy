@@ -29,7 +29,7 @@ class P2PForm(Form):
     rx_name = StringField("Site Name")
     rx_lat_field = DecimalField("Latitude", [InputRequired(), NumberRange(-90, 90)])
     rx_lng_field = DecimalField("Longitude", [InputRequired(), NumberRange(-180, 180)])
-    rx_gain = DecimalField("Ant Gain (dBi)", [Required()])
+    rx_gain = DecimalField("Ant Gain (dBi)", [InputRequired()])
 
 
 class AreaForm(Form):
