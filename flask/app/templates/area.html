@@ -150,10 +150,10 @@
           <div class='row'>
             <div class="form-group">
               <div class="col-sm-4">
-                <label class="control-label">Include Text</label>
+                <label class="control-label">Text Circuit</label>
               </div>
               <div class="col-sm-1">
-                <input type="checkbox" name="sys_include_raw" class="form-control">
+                <input type="checkbox" name="sys_include_text" class="form-control">
               </div>
             </div>
           </div>
@@ -220,7 +220,12 @@
     </div> <!-- end of input params row -->
 
 	</form>
-  <div id="raw-output"></div>
+  <div id="circuit-text" style="display:none">
+    <h3>Input File</h3>
+    <div id="input-file-text"></div>
+    <h3>Output File</h3>
+    <div id="output-file-text"></div>
+  </div>
 </div>
 {% endblock %}
 
@@ -375,8 +380,14 @@
         $('#raw-output').empty();
         $('#modal-plot').attr('src', img_url);
         $('#plot-div').html('<img src="'+img_url+'" class="img-responsive"><a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
-        if(result.hasOwnProperty('raw')){
-          $('#raw-output').html('<pre>'+result['raw']+'</pre>');
+        if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
+          $('#input-file-text').html('<pre>'+result['textIn']+'</pre>');
+          $('#output-file-text').html('<pre>'+result['textOut']+'</pre>');
+          $('#circuit-text').show();
+        } else {
+          $('#circuit-text').hide();
+          $('#input-file-text').empty();
+          $('#output-file-text').empty();
         }
         $('#do-prediction-button').prop('disabled', true);
       },

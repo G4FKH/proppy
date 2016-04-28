@@ -37,7 +37,7 @@ def predict():
         sys_month = int(request.form['month'])
         sys_plot_type = request.form['sys_plot_type']
         sys_mm_noise = request.form['sys_mm_noise']
-        sys_include_raw = True if 'sys_include_raw' in request.form else False
+        sys_include_text = True if 'sys_include_text' in request.form else False
 
         tx_name = json.htmlsafe_dumps(request.form['tx_name'].strip())
         tx_lat = float(request.form['tx_lat_field'])
@@ -65,13 +65,13 @@ def predict():
 
         input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
         input_file.write('PathName "Proppy Plot"\n')
-        input_file.write('PathTXName "{:s}"\n'.format(tx_name))
+        input_file.write('PathTXName {:s}\n'.format(tx_name))
         input_file.write('Path.L_tx.lat {:.2f}\n'.format(tx_lat))
         input_file.write('Path.L_tx.lng {:.2f}\n'.format(tx_lon))
         input_file.write('TXAntFilePath "ISOTROPIC"\n')
         input_file.write('TXGOS {:.2f}\n'.format(tx_gain))
 
-        input_file.write('PathRXName "{:s}"\n'.format(rx_name))
+        input_file.write('PathRXName {:s}\n'.format(rx_name))
         #The following values are not actually required.
         #input_file.write('Path.L_rx.lat {:.2f}\n'.format(rx_lat))
         #input_file.write('Path.L_rx.lon {:.2f}\n'.format(rx_lon))
@@ -167,10 +167,13 @@ def predict():
             'colorbar': rel_cb_dict
         }
         #print(p)
-        if sys_include_raw:
+        if sys_include_text:
+            with open(input_file.name, 'r') as prediction_in:
+                text_in = prediction_in.read()
+                text_in = text_in.replace(current_app.config['ITURHFPROP_DATA_PATH'], "data_file_path")
             with open(output_file.name, 'r') as prediction_out:
-                raw = prediction_out.read()
-            response = {'m':m, 'p':p, 'raw':raw}
+                text_out = prediction_out.read()
+            response = {'m':m, 'p':p, 'textIn':text_in, 'textOut':text_out}
         else:
             response = {'m':m, 'p':p}
         os.remove(input_file.name)
@@ -210,7 +213,7 @@ def areapredict():
 
         sys_mm_noise = request.form['sys_mm_noise']
 
-        sys_include_raw = True if 'sys_include_raw' in request.form else False
+        sys_include_text = True if 'sys_include_text' in request.form else False
 
         tx_name = json.htmlsafe_dumps(request.form['tx_name'].strip())
         tx_lat = float(request.form['tx_lat_field'])
@@ -223,7 +226,7 @@ def areapredict():
 
         input_file = NamedTemporaryFile(mode='w+t', prefix="proppy_", suffix='.in', delete=False)
         input_file.write('PathName "Proppy Plot"\n')
-        input_file.write('PathTXName "{:s}"\n'.format(tx_name))
+        input_file.write('PathTXName {:s}\n'.format(tx_name))
         input_file.write('Path.L_tx.lat {:.2f}\n'.format(tx_lat))
         input_file.write('Path.L_tx.lng {:.2f}\n'.format(tx_lon))
         input_file.write('TXAntFilePath "ISOTROPIC"\n')
@@ -294,10 +297,13 @@ def areapredict():
         #print(output_file.name)
         #os.remove(output_file.name)
         img_url = url_for('static', filename='img/area/'+os.path.basename(png_file.name))
-        if sys_include_raw:
+        if sys_include_text:
+            with open(input_file.name, 'r') as prediction_in:
+                text_in = prediction_in.read()
+                text_in = text_in.replace(current_app.config['ITURHFPROP_DATA_PATH'], "data_file_path")
             with open(output_file.name, 'r') as prediction_out:
-                raw = prediction_out.read()
-            response = {'img_url':img_url, 'raw':raw}
+                text_out = prediction_out.read()
+            response = {'img_url':img_url, 'textIn':text_in, 'textOut':text_out}
         else:
             response = {'img_url':img_url}
         return jsonify(**response)

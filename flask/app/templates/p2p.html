@@ -134,10 +134,10 @@
                   {{ p2p_form.sys_mm_noise(class="form-control") }}
                 </div>
                 <div class="col-sm-2">
-                  <label class="control-label">Include Text</label>
+                  <label class="control-label">Show Text</label>
                 </div>
                 <div class="col-sm-1">
-                  <input type="checkbox" name="sys_include_raw" class="form-control">
+                  <input type="checkbox" name="sys_include_text" class="form-control">
                 </div>
               </div>
             </div>
@@ -259,7 +259,12 @@
     </div> <!-- end of rx params -->
   </div> <!-- end of input params row -->
   </form>
-  <div id="raw-output"></div>
+  <div id="circuit-text" style="display:none">
+    <h3>Input File</h3>
+    <div id="input-file-text"></div>
+    <h3>Output File</h3>
+    <div id="output-file-text"></div>
+  </div>
 </div>
 {% endblock %}
 
@@ -503,10 +508,15 @@
       plotData = result;
       plotLayout = layout;
       $('#flash-container').empty();
-      $('#raw-output').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
-      if(result.hasOwnProperty('raw')){
-        $('#raw-output').html('<pre>'+result['raw']+'</pre>');
+      if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
+        $('#input-file-text').html('<pre>'+result['textIn']+'</pre>');
+        $('#output-file-text').html('<pre>'+result['textOut']+'</pre>');
+        $('#circuit-text').show();
+      } else {
+        $('#circuit-text').hide();
+        $('#input-file-text').empty();
+        $('#output-file-text').empty();
       }
       $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
       $('#map-canvas').css('margin-top', '50px');
