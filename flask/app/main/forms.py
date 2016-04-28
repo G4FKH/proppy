@@ -44,7 +44,7 @@ class AreaForm(Form):
     sys_plot_type = SelectField("Plot Type", choices=[('BCR', 'Reliability'), ('SNR', 'SNR'), ('E', 'Signal Strength')])
     sys_freq = DecimalField("Freq (MHz)",  [Required(), NumberRange(2, 30)])
 
-    hour = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=0, max=23)])
+    hour = IntegerField(widget=HiddenInput(), validators=[InputRequired(), NumberRange(min=0, max=23)])
     month = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=1, max=12)])
     year = IntegerField(widget=HiddenInput(), validators=[Required(), NumberRange(min=1900, max=2050)])
 
