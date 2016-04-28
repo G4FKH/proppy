@@ -499,7 +499,7 @@
       plotLayout = layout;
       $('#flash-container').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
-      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
+      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },

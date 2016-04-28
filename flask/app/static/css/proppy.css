@@ -63,13 +63,14 @@ fieldset legend {
 }
 
 button.plot-zoom {
-  margin-left: 6px;
   display: none;
 }
 
+/*
 #plot-zoom-div {
   display: none;
 }
+*/
 
 @media screen and (min-width: 768px) {
 	.modal-dialog  {
@@ -81,6 +82,7 @@ button.plot-zoom {
     padding-left: 5%;
   }
 
+
   #plot-zoom-div {
     display: block;
     position: absolute;
@@ -90,6 +92,7 @@ button.plot-zoom {
 
   button.plot-zoom {
     display: block;
+    margin-left: 6px;
   }
 
 }
