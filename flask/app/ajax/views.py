@@ -160,7 +160,6 @@ def predict():
             'x':list(range(0,25)),
             'y':list(range(2,31)),
             'type':'contour',
-            'colorscale': 'Jet',
             'autocolorscale': False,
             'zmax':zmax,
             'zmin':zmin,
@@ -399,10 +398,9 @@ def areapredicttest():
         'x':lons.tolist(),
         'y':lats.tolist(),
         'type':'contour',
-        'colorscale': 'Jet',
         'autocolorscale': False
     }
-    print(p)
+    #print(p)
     response = {'p':p}
     os.remove(input_file.name)
     return jsonify(**response)
