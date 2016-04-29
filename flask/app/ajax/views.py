@@ -292,7 +292,7 @@ def areapredict():
         png_file_base = os.path.splitext(png_file.name)[0]
         #print(png_file_base)
 
-        pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, cmap='Jet', out_file=os.path.splitext(png_file.name)[0])
+        pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, cmap='jet', out_file=os.path.splitext(png_file.name)[0])
         #print(input_file.name)
         #os.remove(input_file.name)
         #print(output_file.name)
