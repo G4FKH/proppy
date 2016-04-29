@@ -55,9 +55,10 @@ class Config:
 
     """
     PLOT_COLORSCALE is an optional element and if defined, specifies the
-    color map used with plotly.
+    color map used with plotly.  If this element is omitted, the default
+    'jet' colorscheme will be used.
     """
-    PLOT_COLORSCALE = "[[0, 'rgb(166,206,227)'], [0.25, 'rgb(31,120,180)'], [0.45, 'rgb(178,223,138)'], [0.65, 'rgb(51,160,44)'], [0.85, 'rgb(251,154,153)'], [1, 'rgb(227,26,28)']]"
+    #PLOT_COLORSCALE = "[[0, 'rgb(166,206,227)'], [0.25, 'rgb(31,120,180)'], [0.45, 'rgb(178,223,138)'], [0.65, 'rgb(51,160,44)'], [0.85, 'rgb(251,154,153)'], [1, 'rgb(227,26,28)']]"
 
     @staticmethod
     def init_app(app):
