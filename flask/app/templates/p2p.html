@@ -260,10 +260,22 @@
   </div> <!-- end of input params row -->
   </form>
   <div id="circuit-text" style="display:none">
-    <h3>Input File</h3>
-    <div id="input-file-text"></div>
-    <h3>Output File</h3>
-    <div id="output-file-text"></div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Input File</h3>
+      </div>
+      <div class="panel-body">
+        <div id="input-file-text"></div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Output File</h3>
+      </div>
+      <div class="panel-body">
+        <div id="output-file-text"></div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -510,8 +522,16 @@
       $('#flash-container').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
       if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
-        $('#input-file-text').html('<pre>'+result['textIn']+'</pre>');
-        $('#output-file-text').html('<pre>'+result['textOut']+'</pre>');
+        var pre = document.createElement('pre');
+        var text = document.createTextNode( result['textIn'] );
+        pre.appendChild(text);
+        $('#input-file-text').html(pre);
+        //$('#input-file-text').html('<pre>'+result['textIn']+'</pre>');
+        pre = document.createElement('pre');
+        text = document.createTextNode( result['textOut'] );
+        pre.appendChild(text);
+        $('#output-file-text').html(pre);
+        //$('#output-file-text').html('<pre>'+result['textOut']+'</pre>');
         $('#circuit-text').show();
       } else {
         $('#circuit-text').hide();

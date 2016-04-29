@@ -72,6 +72,20 @@ button.plot-zoom {
 }
 */
 
+pre{
+    display: block;
+    font-family: monospace;
+    padding: 0px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: inherit;
+    border: None;
+}
+
 @media screen and (min-width: 768px) {
 	.modal-dialog  {
     width:90%;
