@@ -39,12 +39,12 @@ def predict():
         sys_mm_noise = request.form['sys_mm_noise']
         sys_include_text = True if 'sys_include_text' in request.form else False
 
-        tx_name = json.htmlsafe_dumps(request.form['tx_name'].strip())
+        tx_name = request.form['tx_name'].strip()
         tx_lat = float(request.form['tx_lat_field'])
         tx_lon = float(request.form['tx_lng_field'])
         tx_gain = float(request.form['tx_gain'])
 
-        rx_name = json.htmlsafe_dumps(request.form['rx_name'].strip())
+        rx_name = request.form['rx_name'].strip()
         rx_lat = float(request.form['rx_lat_field'])
         rx_lon = float(request.form['rx_lng_field'])
         rx_gain = float(request.form['rx_gain'])
@@ -170,6 +170,7 @@ def predict():
         if sys_include_text:
             with open(input_file.name, 'r') as prediction_in:
                 text_in = prediction_in.read()
+                print(text_in)
                 text_in = text_in.replace(current_app.config['ITURHFPROP_DATA_PATH'], "data_file_path")
             with open(output_file.name, 'r') as prediction_out:
                 text_out = prediction_out.read()
@@ -215,7 +216,7 @@ def areapredict():
 
         sys_include_text = True if 'sys_include_text' in request.form else False
 
-        tx_name = json.htmlsafe_dumps(request.form['tx_name'].strip())
+        tx_name = request.form['tx_name'].strip()
         tx_lat = float(request.form['tx_lat_field'])
         tx_lon = float(request.form['tx_lng_field'])
         tx_gain = float(request.form['tx_gain'])
@@ -291,7 +292,7 @@ def areapredict():
         png_file_base = os.path.splitext(png_file.name)[0]
         #print(png_file_base)
 
-        pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, cmap='PlotlyAlt', out_file=os.path.splitext(png_file.name)[0])
+        pap.plot_datasets([0], sys_plot_type, plot_nightshade=True, cmap='Jet', out_file=os.path.splitext(png_file.name)[0])
         #print(input_file.name)
         #os.remove(input_file.name)
         #print(output_file.name)
@@ -300,6 +301,7 @@ def areapredict():
         if sys_include_text:
             with open(input_file.name, 'r') as prediction_in:
                 text_in = prediction_in.read()
+                print(text_in)
                 text_in = text_in.replace(current_app.config['ITURHFPROP_DATA_PATH'], "data_file_path")
             with open(output_file.name, 'r') as prediction_out:
                 text_out = prediction_out.read()
