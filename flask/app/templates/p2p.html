@@ -280,7 +280,11 @@
   <div id="circuit-text" style="display:none">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Input File</h3>
+        <h3 class="panel-title">Input File
+          <button id="copy-input-button" type="button" class="btn btn-primary btn-xs" title="Copy to Clipboard">
+            <span class="glyphicon glyphicon-copy" aria-hidden="true" aria-label="Geo"></span>
+          </button>
+        </h3>
       </div>
       <div class="panel-body">
         <div id="input-file-text"></div>
@@ -288,7 +292,11 @@
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Output File</h3>
+        <h3 class="panel-title">Output File
+          <button id="copy-output-button" type="button" class="btn btn-primary btn-xs" title="Copy to Clipboard">
+            <span class="glyphicon glyphicon-copy" aria-hidden="true" aria-label="Geo"></span>
+          </button>
+        </h3>
       </div>
       <div class="panel-body">
         <div id="output-file-text"></div>
@@ -572,8 +580,13 @@
           message = "An undefined error has occured.";
         }
         $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
-        $('#map-canvas').empty();
-        $('#raw-output').empty();
+        //$('#map-canvas').empty();
+        $('#plot-div').empty();
+
+        $('#circuit-text').hide();
+        $('#input-file-text').empty();
+        $('#output-file-text').empty();
+
         $('#do-prediction-button').prop('disabled', false);
   		}
   	});
@@ -585,6 +598,26 @@
     }
     Plotly.relayout('plot-div', update)
   };
+
+
+  function copyToClipboard(textArea) {
+    console.log(textArea);
+    var range = document.createRange();
+    var msg;
+    range.selectNodeContents(textArea.get(0));
+    selection = window.getSelection ();
+    selection.removeAllRanges ();
+    selection.addRange (range);
+    // Lets copy.
+    try {
+      success = document.execCommand ("copy", false, null);
+      msg = 'Text has been copied to the system clipboard';
+    } catch (e) {
+      msg = 'Failed to copy text to the system clipboard';
+    }
+    document.getSelection().removeAllRanges();
+    alert(msg);
+  }
 
 </script>
 
@@ -605,6 +638,16 @@ $(document).ready(function(){
     $('#rx-geolocation-button').on('click', function (e) {
       navigator.geolocation.getCurrentPosition(showRxPosition);
     });
+
+
+    $('#copy-input-button').on('click', function (e) {
+      copyToClipboard($("#input-file-text"));
+    });
+
+    $('#copy-output-button').on('click', function (e) {
+      copyToClipboard($("#output-file-text"));
+    });
+
 
     $('#do-prediction-button').prop('disabled', false);
 
