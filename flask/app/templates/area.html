@@ -71,8 +71,12 @@
     </div>
     <div class="row">
       <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">System</h3>
+          </div>
+          <div class="panel-body">
         <fieldset>
-          <legend>System</legend>
           <input type="hidden" name="hour" />
           <input type="hidden" name="month" />
           <input type="hidden" name="year" />
@@ -160,17 +164,22 @@
 
         </fieldset>
       </div>
+    </div>
+      </div>
 
       <!-- tx params -->
       <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Tx. Site
+              <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
+              <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
+              </button>
+            </h3>
+          </div>
+          <div class="panel-body">
         <fieldset>
-          <legend>Tx. Site
-            <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
-            <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
-              <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
-            </button>
-          </legend>
-
           <div class="row">
             <div class="form-group">
               <div class="col-sm-4">
@@ -216,6 +225,8 @@
           </div>
 
         </fieldset>
+      </div>
+    </div>
       </div> <!-- end of tx params -->
     </div> <!-- end of input params row -->
 

@@ -8,6 +8,7 @@ html {
   text-align: center;
 }
 
+/*
 fieldset {
   border: 1px groove #ddd !important;
   padding: 0 1.4em 1.4em 1.4em !important;
@@ -18,9 +19,18 @@ fieldset {
 
 fieldset legend {
   font-size: 1.2em;
-  width:inherit; /* Or auto */
-  padding:0 10px; /* To give a bit of padding on the left and right */
+  width:inherit;
+  padding:0 10px;
   border-bottom:none;
+}
+*/
+
+#do-prediction-button {
+  margin-bottom: 15px;
+}
+
+.panel fieldset {
+  margin: 5px 20px;
 }
 
 /* Google Map */
