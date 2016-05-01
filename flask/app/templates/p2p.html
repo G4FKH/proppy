@@ -160,7 +160,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">Tx. Site
             <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
-            <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
+            <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs" title="Set Tx. Site to Current Location">
               <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
             </button>
           </h3>
@@ -221,7 +221,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">Rx. Site
             <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png" height="16" width="16" alt="Blue Balloon">
-            <button id="rx-geolocation-button" type="button" class="btn btn-primary btn-xs">
+            <button id="rx-geolocation-button" type="button" class="btn btn-primary btn-xs" title="Set Rx. Site to Current Location">
               <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
             </button>
           </h3>
@@ -564,7 +564,7 @@
         $('#input-file-text').empty();
         $('#output-file-text').empty();
       }
-      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
+      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom" title="Open Image"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },

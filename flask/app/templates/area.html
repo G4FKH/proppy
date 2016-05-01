@@ -173,7 +173,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Tx. Site
               <img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png" height="16" width="16" alt="Red Balloon">
-              <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs">
+              <button id="tx-geolocation-button" type="button" class="btn btn-primary btn-xs" title="Set Tx. Site to Current Location">
                 <span class="glyphicon glyphicon-map-marker" aria-hidden="true" aria-label="Geo"></span>
               </button>
             </h3>
@@ -410,7 +410,7 @@
         $('#flash-container').empty();
         $('#raw-output').empty();
         $('#modal-plot').attr('src', img_url);
-        $('#plot-div').html('<img src="'+img_url+'" class="img-responsive"><a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
+        $('#plot-div').html('<img src="'+img_url+'" class="img-responsive"><a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom" title="Open Image"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
         if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
           var pre = document.createElement('pre');
           var text = document.createTextNode( result['textIn'] );
