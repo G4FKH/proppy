@@ -27,16 +27,16 @@ Install python3-mod_wsgi
 
 Create the file /etc/httpd/conf.d/wsgi.conf with the contents;
 
-    WSGIDaemonProcess proppy user=your_user_name group=www-data threads=5 python-path=path_to_flaskapp
+    WSGISocketPrefix /var/run/wsgi
+    WSGIDaemonProcess fubar user=your_user_name group=your_group threads=5 python-path=your_path
     WSGIScriptAlias /proppy /var/www/ituprop/proppy.wsgi
-    <directory /var/www/ituprop>
-            WSGIProcessGroup proppy
-            WSGIApplicationGroup %{GLOBAL}
-            WSGIScriptReloading On
-            Order deny,allow
-            Allow from all
-    </directory>
 
+    <Directory /var/www/ituprop>
+        WSGIProcessGroup proppy
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
 
 ## Ubuntu Installation notes
 
@@ -44,10 +44,10 @@ Create the file /etc/httpd/conf.d/wsgi.conf with the contents;
 
 Add the following to the /etc/apache2/sites-enabled/000-default.conf
 
-    WSGIDaemonProcess fubar user=jwatson group=www-data threads=5 python-path=/var/www/nubar/
-    WSGIScriptAlias /nubar /var/www/nubar/fubar.wsgi
-    <directory /var/www/nubar>
-        WSGIProcessGroup fubar
+    WSGIDaemonProcess proppy user=your_user_name group=www-data threads=5 python-path=your_path
+    WSGIScriptAlias /proppy /var/www/ituprop/proppy.wsgi
+    <directory /var/www/ituprop>
+        WSGIProcessGroup proppy
         WSGIApplicationGroup %{GLOBAL}
         WSGIScriptReloading On
         Order deny,allow
