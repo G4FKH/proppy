@@ -21,14 +21,14 @@
         $('#band_select').change(function() {
           update_image();
           if ($("#band_select").prop('selectedIndex') == 0) {
-          $(".prevbutton").prop("disabled",true);
-            $(".nextbutton").prop("disabled",false);
+          $("#prevBandButton").prop("disabled",true);
+            $("#nextBandButton").prop("disabled",false);
           } else if ($("#band_select").prop('selectedIndex') == $('#band_select option').size()-1) {
-            $(".prevbutton").prop("disabled",false);
-            $(".nextbutton").prop("disabled",true);
+            $("#prevBandButton").prop("disabled",false);
+            $("#nextBandButton").prop("disabled",true);
           } else {
-            $(".prevbutton").prop("disabled",false);
-            $(".nextbutton").prop("disabled",false);
+            $("#prevBandButton").prop("disabled",false);
+            $("#nextBandButton").prop("disabled",false);
           }
         });
 
@@ -38,10 +38,20 @@
 
         $('#hour_select').change(function() {
           update_image();
+          if ($("#hour_select").prop('selectedIndex') == 0) {
+          $("#prevUTCButton").prop("disabled",true);
+            $("#nextUTCButton").prop("disabled",false);
+          } else if ($("#hour_select").prop('selectedIndex') == $('#hour_select option').size()-1) {
+            $("#prevUTCButton").prop("disabled",false);
+            $("#nextUTCButton").prop("disabled",true);
+          } else {
+            $("#prevUTCButton").prop("disabled",false);
+            $("#nextUTCButton").prop("disabled",false);
+          }
         });
 
 
-    $("#next").click(function() {
+    $("#nextBandButton").click(function() {
       var selectedIndex = ($("#band_select").prop('selectedIndex'));
       if (selectedIndex < $('#band_select option').size()-1) {
         $('#band_select').prop('selectedIndex', selectedIndex+1);
@@ -49,13 +59,30 @@
       }
     });
 
-    $("#prev").click(function() {
+    $("#prevBandButton").click(function() {
       var selectedIndex = ($("#band_select").prop('selectedIndex'));
       if (selectedIndex > 0) {
         $('#band_select').prop('selectedIndex', selectedIndex-1);
         $('#band_select').trigger('change');
       }
     });
+
+    $("#nextUTCButton").click(function() {
+      var selectedIndex = ($("#hour_select").prop('selectedIndex'));
+      if (selectedIndex < $('#hour_select option').size()-1) {
+        $('#hour_select').prop('selectedIndex', selectedIndex+1);
+        $('#hour_select').trigger('change');
+      }
+    });
+
+    $("#prevUTCButton").click(function() {
+      var selectedIndex = ($("#hour_select").prop('selectedIndex'));
+      if (selectedIndex > 0) {
+        $('#hour_select').prop('selectedIndex', selectedIndex-1);
+        $('#hour_select').trigger('change');
+      }
+    });
+
     var d = new Date();
     $("#hour_select").val(d.getUTCHours());
     $('#hour_select').trigger('change');
@@ -106,6 +133,8 @@
       <option value="22">22:00</option>
       <option value="23">23:00</option>
     </select>
+    <button id="prevUTCButton">&#8659;</button>
+    <button id="nextUTCButton">&#8657;</button>
     <label for="band_select">Band:&nbsp;</label>
     <select id="band_select">
       <option value="1">3.52MHz (80m)</option>
@@ -118,8 +147,8 @@
       <option value="8">24.89MHz (12m)</option>
       <option value="9">28.02MHz (10m)</option>
     </select>
-    <button id="prev" class="prevbutton">&#8659;</button>
-    <button id="next" class="nextbutton">&#8657;</button>
+    <button id="prevBandButton">&#8659;</button>
+    <button id="nextBandButton">&#8657;</button>
     <label for="data_select">Type:&nbsp;</label>
     <select id="data_select">
       <option value="rel">REL</option>
@@ -137,30 +166,26 @@
   http://www.itu.int/oth/R0A0400006F/en</a>.</li>
   <li>As a base we use central U.K., thus creating a world-wide propagation view
   suitable for everyone in the U.K.</li>
-  <li>The SSN used is the suggested new SIDC re-calculated SSN's, available from
-  their site at <a href="http://sidc.be/silso/">http://sidc.be/silso/</a>.
-  As these are automatically derived,
-  it is unnecessary to worry about the SSN.</li>
-  <li>The plots are recalculated and presented at the beginning of the hour, a
+  <li>The plots are recalculated at the beginning of each month, a
   choice of frequency, reliability (REL), SNR (SNR) or field strength
   (S-Meter) are available at the bottom of the plot under "Band:" and "Type:".</li>
   <li>Along the right hand side is the colour legend, percentage for REL, dB for
   SNR and (S-Meter) for field strength.</li>
   <li>A day/night terminator line is shown for convenience.</li>
-  <li>A dedicated LF filter, eliminating marginal reliabilities at lower
-  frequencies, has been applied to the predicted dataset to better reflect
-  the equipment used at typical operator's locations.</li>
   <li>To use these plots choose the frequency of interest, then look at the plots in any order. E.G. For 3B8 on 14MHz at 17:00 the S-Meter plot is suggesting S2, an SNR of between 10 and 20dB and finally a reliability of between 10 and 20%. What does this mean; the SNR is too low even for CW (at least 30dB is needed), the stated reliability will occur at most 20% of days this month and the expected S-Meter of 2 may be below the local noise. No path could realistically be expected during this particular period with the stated power level and aerial type.</li>
 </ul>
   <p>This site would not be available but for the kind co-operation of the
     ITU through the guise of Chris Behm, the compiler of the program. The
-    program calculates the HF path parameters that appear in Recommendation
+    program calculates the HF path parameters in accordance with ITU Recommendation
     <a href="https://www.itu.int/rec/R-REC-P.533/en">ITU-R P.533-13</a>.</p>
   <p>Thanks are also due to James Watson who assembled the above web
   interpretation.  All of the plotting routines used to create this page are
   available under an open source licence and may be found at be found at
-  <a href="https://github.com/jawatson/pythonprop-rawhide">
-    https://github.com/jawatson/pythonprop-rawhide</a>.</p>
+  <a href="https://github.com/jawatson/proppy">
+    https://github.com/jawatson/proppy</a>.</p>
+  <p>The proppy project now supports on demand propagation predictions.  This is
+    under active developent and is available on a trail basis at the following
+    URL; <a href="http://139.162.54.202/proppy/">http://139.162.54.202/proppy/</a>.</p>
   <p>Any Comments/Suggestion e-mail Gwyn Williams, G4FKH at
     <a href="mailto:g4fkh@sky.com?Subject=ITURHFProp%20Propagation%20Prediction%20Webpage">g4fkh@sky.com</a>
   </p>
