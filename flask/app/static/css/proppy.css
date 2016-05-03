@@ -82,7 +82,7 @@ button.plot-zoom {
 }
 */
 
-pre{
+pre {
     display: block;
     font-family: monospace;
     padding: 0px;
@@ -116,7 +116,10 @@ pre{
 
   button.plot-zoom {
     display: block;
-    margin-left: 6px;
+  }
+
+  #hover-text {
+    margin-top: 15px
   }
 
 }

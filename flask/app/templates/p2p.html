@@ -61,7 +61,7 @@
            </button>
            <div id="modal-plot-canvas" ></div>
            <div id="modal-hover-text" class="well well-sm text-center">
-             <p>&nbsp;</p>
+             <span>&nbsp;</span>
            </div>
          </div>
       </div>
@@ -476,19 +476,19 @@
       var muf = data.points[1];
       var hText;
       if (plotData['p']['name'] == 'BCR') {
-        hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
+        hText = "<span>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</span>"
       } else if (plotData['p']['name'] == 'SNR') {
-        hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</p>"
+        hText = "<span>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</span>"
       } else if (plotData['p']['name'] == 'E'){
-        hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
+        hText = "<span>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</span>"
       } else {
-        hText = "<p>&nbsp</p>";
+        hText = "<span>&nbsp</span>";
       }
       $(hoverPanel).html(hText);
     });
 
     document.getElementById(plotDiv).on('plotly_unhover', function(data){
-      $(hoverPanel).html('<p>&nbsp</p>');
+      $(hoverPanel).html('<span>&nbsp</span>');
     });
   }
 
