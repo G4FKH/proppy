@@ -160,6 +160,7 @@ def predict():
         p = {'z':mesh_grid.tolist(),
             'x':list(range(0,25)),
             'y':list(range(2,31)),
+            'name':sys_plot_type,
             'type':'contour',
             'autocolorscale': False,
             'zmax':zmax,

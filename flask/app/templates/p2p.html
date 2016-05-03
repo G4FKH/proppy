@@ -45,15 +45,17 @@
     </div>
     <div class="col-sm-6">
       <div id="plot-div"></div>
-      <div id="plot-zoom-div"></div>
+      <div id="hover-text" class="well well-sm"></div>
+
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <div id="tmp-plot-div"></div>
-    </div>
-  </div>
+
+  <div id="plot-zoom-div"></div>
+
+
+
+
 
   <div class="modal fade" id="modal-plot" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -72,11 +74,16 @@
   <form class="form-horizontal" method="post" id="parameters_form" action = "{{ url_for('ajax.predict') }}" enctype="multipart/form-data">
     {{ p2p_form.csrf_token }}
     <div class="row m-t-15">
-      <div class="col-sm-offset-5 col-sm-2 text-center">
-        <button id="do-prediction-button" type="submit" class="btn btn-primary" disabled>
-          Run Prediction
-          <span class="glyphicon glyphicon glyphicon-refresh"></span>
-        </button>
+      <div class="col-sm-offset-4 col-sm-4 text-center">
+        <div id="control-btn-group" class="btn-group" role="group" aria-label="...">
+          <button id="do-prediction-button" type="submit" class="btn btn-primary" disabled>
+            Run Prediction<span class="glyphicon glyphicon glyphicon-refresh"></span>
+          </button>
+          <button id="zoom-btn" type="button" class="btn btn-primary plot-zoom" title="Open Image" disabled>
+            <span class="glyphicon glyphicon glyphicon-zoom-in"></span>
+          </button>
+      </div>
+
       </div>
     </div>
     <div class="row">
@@ -436,6 +443,12 @@
   <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
   <script>
+
+  function pad (str, max) {
+    str = str.toString();
+    return str.length < max ? pad("0" + str, max) : str;
+  }
+
   $(function () {
     var dateNow = new Date();
     $('#datetimepicker').datetimepicker({
@@ -489,7 +502,9 @@
   		contentType: false,
   		success: function(result) {
 
-      //console.log(result);
+      console.log(result);
+      result['p']['hoverinfo']='none';
+      result['m']['hoverinfo']='none';
 
       if (window.innerWidth >= 768) {
         var titlefont = {
@@ -547,6 +562,28 @@
       plotLayout = layout;
       $('#flash-container').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
+
+      document.getElementById('plot-div').on('plotly_hover', function(data){
+          var mesh = data.points[0];
+          var muf = data.points[1];
+          var hText;
+          console.log(plotData['p']['name']);
+          if (plotData['p']['name'] == 'BCR') {
+            hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
+          } else if (plotData['p']['name'] == 'SNR') {
+            hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</p>"
+          } else if (plotData['p']['name'] == 'E'){
+            hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
+          } else {
+            hText = "";
+          }
+          $('#hover-text').html(hText);
+        });
+
+        document.getElementById('plot-div').on('plotly_unhover', function(data){
+            $('#hover-text').empty();
+          });
+
       if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
         var pre = document.createElement('pre');
         var text = document.createTextNode( result['textIn'] );
@@ -564,7 +601,8 @@
         $('#input-file-text').empty();
         $('#output-file-text').empty();
       }
-      $('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom" title="Open Image"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
+      //$('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom" title="Open Image"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
+      $('#zoom-btn').prop('disabled', false);
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },
@@ -582,6 +620,8 @@
         $('#flash-container').html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
         //$('#map-canvas').empty();
         $('#plot-div').empty();
+        $('#zoom-btn').prop('disabled', true);
+        $('#hover-text').empty();
 
         $('#circuit-text').hide();
         $('#input-file-text').empty();
@@ -622,18 +662,23 @@
 </script>
 
 <script>
+
+
 $(document).ready(function(){
     $('#parameters_form').on('change', function(e) {
       inputHasChanged();
     });
 
+
     $("#datetimepicker").on("dp.change", function (e) {
       inputHasChanged();
     });
 
+
     $('#tx-geolocation-button').on('click', function (e) {
       navigator.geolocation.getCurrentPosition(showTxPosition);
     });
+
 
     $('#rx-geolocation-button').on('click', function (e) {
       navigator.geolocation.getCurrentPosition(showRxPosition);
@@ -644,6 +689,7 @@ $(document).ready(function(){
       copyToClipboard($("#input-file-text"));
     });
 
+
     $('#copy-output-button').on('click', function (e) {
       copyToClipboard($("#output-file-text"));
     });
@@ -651,17 +697,20 @@ $(document).ready(function(){
 
     $('#do-prediction-button').prop('disabled', false);
 
-    $(document).on("click", ".pop",function() {
+
+    $('#zoom-btn').on('click', function() {
 			$('#modal-plot').modal('show');
       $('#plot-div').empty();
       plotLayout['width'] = $(window).width() * 0.8;
       Plotly.newPlot('modal-plot-canvas', [plotData['p'], plotData['m']], plotLayout);
 		});
 
+
     $('#modal-plot').on('hidden.bs.modal', function (e) {
       plotLayout['width'] = $('#plot-div').width();
       Plotly.newPlot('plot-div', [plotData['p'], plotData['m']], plotLayout);
     });
+
 });
 </script>
 {% endblock %}
