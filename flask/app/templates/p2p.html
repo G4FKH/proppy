@@ -45,17 +45,11 @@
     </div>
     <div class="col-sm-6">
       <div id="plot-div"></div>
-      <div id="hover-text" class="well well-sm"></div>
-
+      <div id="hover-text" class="well well-sm text-center" style="display:none">
+        <p>&nbsp;</p>
+      </div>
     </div>
   </div>
-
-
-  <div id="plot-zoom-div"></div>
-
-
-
-
 
   <div class="modal fade" id="modal-plot" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -82,8 +76,7 @@
           <button id="zoom-btn" type="button" class="btn btn-primary plot-zoom" title="Open Image" disabled>
             <span class="glyphicon glyphicon glyphicon-zoom-in"></span>
           </button>
-      </div>
-
+        </div>
       </div>
     </div>
     <div class="row">
@@ -502,7 +495,7 @@
   		contentType: false,
   		success: function(result) {
 
-      console.log(result);
+      //console.log(result);
       result['p']['hoverinfo']='none';
       result['m']['hoverinfo']='none';
 
@@ -567,7 +560,7 @@
           var mesh = data.points[0];
           var muf = data.points[1];
           var hText;
-          console.log(plotData['p']['name']);
+          //console.log(plotData['p']['name']);
           if (plotData['p']['name'] == 'BCR') {
             hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
           } else if (plotData['p']['name'] == 'SNR') {
@@ -575,13 +568,13 @@
           } else if (plotData['p']['name'] == 'E'){
             hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
           } else {
-            hText = "";
+            hText = "<p>&nbsp</p>";
           }
           $('#hover-text').html(hText);
         });
 
         document.getElementById('plot-div').on('plotly_unhover', function(data){
-            $('#hover-text').empty();
+            $('#hover-text').html('<p>&nbsp</p>');
           });
 
       if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
@@ -602,7 +595,8 @@
         $('#output-file-text').empty();
       }
       //$('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom" title="Open Image"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
-      $('#zoom-btn').prop('disabled', false);
+      //$('#zoom-btn').prop('disabled', false);
+      $('#hover-text').show();
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },
@@ -641,7 +635,6 @@
 
 
   function copyToClipboard(textArea) {
-    console.log(textArea);
     var range = document.createRange();
     var msg;
     range.selectNodeContents(textArea.get(0));
