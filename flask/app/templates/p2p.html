@@ -469,8 +469,20 @@
     e.preventDefault();
   });
 
+  function setHoverWindowVisible(visible) {
+    if (window.innerWidth > 768) {
+      console.log("we're on a big screen");
+      if (visible) {
+        console.log('going visible');
+        $('#hover-text').show();
+      } else {
+        console.log('hiding');
+        $('#hover-text').hide();
+      }
+    }
+  }
+
   function bindHoverWindowEvents(plotDiv, hoverPanel) {
-    console.log('binding');
     document.getElementById(plotDiv).on('plotly_hover', function(data){
       var mesh = data.points[0];
       var muf = data.points[1];
@@ -582,27 +594,6 @@
       $('#flash-container').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
       bindHoverWindowEvents('plot-div', '#hover-text');
-      /*
-      document.getElementById('plot-div').on('plotly_hover', function(data){
-        var mesh = data.points[0];
-        var muf = data.points[1];
-        var hText;
-        if (plotData['p']['name'] == 'BCR') {
-          hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
-        } else if (plotData['p']['name'] == 'SNR') {
-          hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</p>"
-        } else if (plotData['p']['name'] == 'E'){
-          hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
-        } else {
-          hText = "<p>&nbsp</p>";
-        }
-        $('#hover-text').html(hText);
-      });
-
-      document.getElementById('plot-div').on('plotly_unhover', function(data){
-        $('#hover-text').html('<p>&nbsp</p>');
-      });
-      */
 
       if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
         var pre = document.createElement('pre');
@@ -622,7 +613,8 @@
         $('#output-file-text').empty();
       }
       $('#zoom-btn').prop('disabled', false);
-      $('#hover-text').show();
+      //$('#hover-text').show();
+      setHoverWindowVisible(true);
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
     },
@@ -641,8 +633,7 @@
         //$('#map-canvas').empty();
         $('#plot-div').empty();
         $('#zoom-btn').prop('disabled', true);
-        $('#hover-text').empty();
-
+        setHoverWindowVisible(false);
         $('#circuit-text').hide();
         $('#input-file-text').empty();
         $('#output-file-text').empty();
