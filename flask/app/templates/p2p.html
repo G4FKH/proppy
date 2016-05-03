@@ -60,6 +60,9 @@
              <span class="sr-only">Close</span>
            </button>
            <div id="modal-plot-canvas" ></div>
+           <div id="modal-hover-text" class="well well-sm text-center">
+             <p>&nbsp;</p>
+           </div>
          </div>
       </div>
     </div>
@@ -422,7 +425,6 @@
   }
 
   function updateGCPath() {
-    //console.log($('#tx_lat_field').val());
     var txPosition = new google.maps.LatLng($('#tx_lat_field').val(), $('#tx_lng_field').val());
     var rxPosition = new google.maps.LatLng($('#rx_lat_field').val(), $('#rx_lng_field').val());
     gcPath.setPath([txPosition, rxPosition]);
@@ -461,10 +463,34 @@
       $("#ajax-spinner").hide();
   });
 
-  $("#parameters_form").submit( function ( e ) {
+  $("#parameters_form").submit( function ( e ) {        //console.log(plotData['p']['name']);
+
     do_prediction(e.target);
     e.preventDefault();
   });
+
+  function bindHoverWindowEvents(plotDiv, hoverPanel) {
+    console.log('binding');
+    document.getElementById(plotDiv).on('plotly_hover', function(data){
+      var mesh = data.points[0];
+      var muf = data.points[1];
+      var hText;
+      if (plotData['p']['name'] == 'BCR') {
+        hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
+      } else if (plotData['p']['name'] == 'SNR') {
+        hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</p>"
+      } else if (plotData['p']['name'] == 'E'){
+        hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
+      } else {
+        hText = "<p>&nbsp</p>";
+      }
+      $(hoverPanel).html(hText);
+    });
+
+    document.getElementById(plotDiv).on('plotly_unhover', function(data){
+      $(hoverPanel).html('<p>&nbsp</p>');
+    });
+  }
 
   function do_prediction(form) {
   	var form_obj = form;
@@ -555,27 +581,28 @@
       plotLayout = layout;
       $('#flash-container').empty();
       Plotly.newPlot('plot-div', [result['p'], result['m']], layout);
-
+      bindHoverWindowEvents('plot-div', '#hover-text');
+      /*
       document.getElementById('plot-div').on('plotly_hover', function(data){
-          var mesh = data.points[0];
-          var muf = data.points[1];
-          var hText;
-          //console.log(plotData['p']['name']);
-          if (plotData['p']['name'] == 'BCR') {
-            hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
-          } else if (plotData['p']['name'] == 'SNR') {
-            hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</p>"
-          } else if (plotData['p']['name'] == 'E'){
-            hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
-          } else {
-            hText = "<p>&nbsp</p>";
-          }
-          $('#hover-text').html(hText);
-        });
+        var mesh = data.points[0];
+        var muf = data.points[1];
+        var hText;
+        if (plotData['p']['name'] == 'BCR') {
+          hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz BCR: "+mesh.z+"% MUF: "+muf.y+"MHz</p>"
+        } else if (plotData['p']['name'] == 'SNR') {
+          hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz SNR: "+mesh.z+"dB MUF: "+muf.y+"MHz</p>"
+        } else if (plotData['p']['name'] == 'E'){
+          hText = "<p>"+pad(mesh.x,2)+":00UTC "+mesh.y+"MHz E: "+mesh.z+"dB(1&#181;/Vm) MUF: "+muf.y+"MHz</p>"
+        } else {
+          hText = "<p>&nbsp</p>";
+        }
+        $('#hover-text').html(hText);
+      });
 
-        document.getElementById('plot-div').on('plotly_unhover', function(data){
-            $('#hover-text').html('<p>&nbsp</p>');
-          });
+      document.getElementById('plot-div').on('plotly_unhover', function(data){
+        $('#hover-text').html('<p>&nbsp</p>');
+      });
+      */
 
       if(result.hasOwnProperty('textIn') && result.hasOwnProperty('textOut')) {
         var pre = document.createElement('pre');
@@ -594,8 +621,7 @@
         $('#input-file-text').empty();
         $('#output-file-text').empty();
       }
-      //$('#plot-zoom-div').html('<a href="#" class="pop"><button type="button" class="btn btn-primary plot-zoom" title="Open Image"><span class="glyphicon glyphicon glyphicon-zoom-in"></span></button></a>');
-      //$('#zoom-btn').prop('disabled', false);
+      $('#zoom-btn').prop('disabled', false);
       $('#hover-text').show();
       $('#map-canvas').css('margin-top', '50px');
       $('#do-prediction-button').prop('disabled', true);
@@ -696,12 +722,14 @@ $(document).ready(function(){
       $('#plot-div').empty();
       plotLayout['width'] = $(window).width() * 0.8;
       Plotly.newPlot('modal-plot-canvas', [plotData['p'], plotData['m']], plotLayout);
+      bindHoverWindowEvents('modal-plot-canvas', '#modal-hover-text')
 		});
 
 
     $('#modal-plot').on('hidden.bs.modal', function (e) {
       plotLayout['width'] = $('#plot-div').width();
       Plotly.newPlot('plot-div', [plotData['p'], plotData['m']], plotLayout);
+      bindHoverWindowEvents('plot-div', '#hover-text')
     });
 
 });
